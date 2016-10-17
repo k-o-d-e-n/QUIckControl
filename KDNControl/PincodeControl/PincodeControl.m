@@ -11,6 +11,7 @@
 @interface PincodeControl ()
 @property (nonatomic, strong) NSMutableString * text;
 @property (nonatomic, readwrite) IBInspectable NSUInteger codeLength;
+@property (nonatomic) BOOL filled;
 @end
 
 @implementation PincodeControl
@@ -39,6 +40,13 @@
     }
     
     return self;
+}
+
+-(void)setFilled:(BOOL)filled {
+    if (_filled != filled) {
+        _filled = filled;
+        [self applyCurrentState];
+    }
 }
 
 -(void)setCodeLength:(NSUInteger)codeLength {
@@ -78,11 +86,11 @@
 #pragma mark - UIControl
 
 -(void)setBorderWidth:(CGFloat)borderWidth forState:(UIControlState)state {
-    [self setValue:@(borderWidth) forKeyPath:keyPath(UIView, layer.borderWidth) forState:state];
+    [self setValue:@(borderWidth) forTarget:self.layer.sublayers forKeyPath:keyPath(CALayer, borderWidth) forState:state];
 }
 
 -(void)setBorderColor:(UIColor*)borderColor forState:(UIControlState)state {
-    [self setValue:(id)borderColor.CGColor forKeyPath:keyPath(UIView, layer.borderColor) forState:state];
+    [self setValue:(id)borderColor.CGColor forTarget:self.layer.sublayers forKeyPath:keyPath(CALayer, borderColor) forState:state];
 }
 
 #pragma mark - UIResponder
@@ -92,7 +100,7 @@
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [super touchesEnded:touches withEvent:event];
+//    [super touchesEnded:touches withEvent:event];
     [self becomeFirstResponder];
 }
 
@@ -114,6 +122,9 @@
 
 -(void)deleteBackward {
     if ([self hasText]) {
+        if (self.text.length == self.codeLength) {
+            self.filled = NO;
+        }
         [self.text deleteCharactersInRange:NSMakeRange(self.text.length - 1, 1)];
         [self.layer.sublayers[self.text.length] setBackgroundColor:[UIColor grayColor].CGColor];
     }
@@ -123,6 +134,8 @@
     if (self.text.length < self.codeLength) {
         [self.layer.sublayers[self.text.length] setBackgroundColor:[UIColor greenColor].CGColor];
         [self.text appendString:text];
+    } else {
+        self.filled = YES;
     }
 }
 

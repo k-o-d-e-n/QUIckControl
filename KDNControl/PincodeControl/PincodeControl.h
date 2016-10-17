@@ -8,10 +8,13 @@
 
 #import "KDNControl.h"
 
+static const UIControlState PincodeControlStateFilled = 1 << 16;
+
 @interface PincodeControl : KDNControl<UIKeyInput>
 
 @property (nonatomic, readonly) NSUInteger codeLength;
 @property (nonatomic) IBInspectable CGFloat spaceBetweenItems;
+@property (nonatomic, readonly) BOOL filled;
 
 -(void)setBorderWidth:(CGFloat)borderWidth forState:(UIControlState)state;
 -(void)setBorderColor:(UIColor*)borderColor forState:(UIControlState)state;

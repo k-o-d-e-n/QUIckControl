@@ -12,6 +12,7 @@
 
 @interface KDNControl : UIControl
 
+-(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forState:(UIControlState)state;
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state; // in good case should use only in superclass, or inside subclass
 -(void)registerState:(UIControlState)state forBoolKeyPath:(NSString*)keyPath inverted:(BOOL)inverted;
 

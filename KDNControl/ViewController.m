@@ -55,11 +55,14 @@ static const UIControlState KDNControlStateOpaque = 1 << 16;
     [self.control addTarget:self action:@selector(controlTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     
     ExampleControl * example = [[ExampleControl alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    [example setValue:[UIColor grayColor] forKeyPath:keyPath(ExampleControl, backgroundColor) forState:ExampleState];
+//    [example setValue:[UIColor grayColor] forKeyPath:keyPath(ExampleControl, backgroundColor) forState:ExampleState];
     [self.view addSubview:example]; self.example = example;
+    [self.control setValue:[UIColor grayColor] forTarget:self.example forKeyPath:keyPath(ExampleControl, backgroundColor) forState:UIControlStateSelected];
+    [self.control setValue:@5 forTarget:self.example forKeyPath:keyPath(ExampleControl, layer.borderWidth) forState:UIControlStateSelected];
     
+    [self.pincodeControl setValue:@[(id)[UIColor redColor].CGColor, (id)[UIColor greenColor].CGColor, (id)[UIColor blueColor].CGColor] forTarget:self.pincodeControl.layer.sublayers forKeyPath:keyPath(CALayer, backgroundColor) forState:UIControlStateNormal];
     [self.pincodeControl setBorderWidth:2.0 forState:UIControlStateHighlighted];
-    [self.pincodeControl setBorderColor:[UIColor redColor] forState:UIControlStateHighlighted];
+    [self.pincodeControl setBorderColor:[UIColor blackColor] forState:UIControlStateHighlighted];
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -69,7 +72,7 @@ static const UIControlState KDNControlStateOpaque = 1 << 16;
 
 -(void)controlTouchUpInside:(KDNControl*)control {
     [control setSelected:!control.isSelected];
-    self.example.exampleState = control.isSelected;
+//    self.example.exampleState = control.isSelected;
 }
 
 - (IBAction)testButton:(UIButton *)sender {
