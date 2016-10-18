@@ -6,17 +6,17 @@
 //  Copyright © 2016 Denis Koryttsev. All rights reserved.
 //
 
-#import "KDNControl.h"
+#import "QUIckControl.h"
 
-@interface KDNControlArrayWrapper : NSObject
+@interface QUIckControlArrayWrapper : NSObject
 -(instancetype)initWithEnumeratedObject:(id<NSFastEnumeration>)object;
 @end
 
-@interface KDNControlArrayWrapper ()
+@interface QUIckControlArrayWrapper ()
 @property (nonatomic, strong) NSMutableArray * array;
 @end
 
-@implementation KDNControlArrayWrapper
+@implementation QUIckControlArrayWrapper
 
 -(instancetype)initWithEnumeratedObject:(id<NSFastEnumeration>)object {
     if (self = [super init]) {
@@ -30,17 +30,23 @@
 }
 
 -(void)setValue:(id)value forKey:(NSString *)key {
-    if ([value conformsToProtocol:@protocol(NSFastEnumeration)]) {
-        id<NSFastEnumeration> collection = value;
-        short i = 0;
-        for (id value in collection) {
-            if (i == _array.count) return;
-            [_array[i] setValue:value forKey:key];
-            ++i;
+    // Disable animation temporarily.
+//    [CATransaction flush];
+//    [CATransaction begin];
+//    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        if ([value conformsToProtocol:@protocol(NSFastEnumeration)]) {
+            id<NSFastEnumeration> collection = value;
+            short i = 0;
+            for (id value in collection) {
+                if (i == _array.count) return;
+                [_array[i] setValue:value forKey:key];
+                ++i;
+            }
+        } else {
+            [_array setValue:value forKey:key];
         }
-    } else {
-        [_array setValue:value forKey:key];
-    }
+    // Re-enable animation.
+//    [CATransaction commit];
 }
 
 -(BOOL)isEqual:(id)object {
@@ -49,13 +55,13 @@
 
 @end
 
-static NSString * const KDNControlBoolKeyPathKey = @"boolKey";
-static NSString * const KDNControlInvertedKey = @"inverted";
-static NSString * const KDNControlTargetKey = @"target";
-static NSString * const KDNControlValueKey = @"value";
-static NSString * const KDNControlDefaultValueKey = @"default";
+static NSString * const QUIckControlBoolKeyPathKey = @"boolKey";
+static NSString * const QUIckControlInvertedKey = @"inverted";
+static NSString * const QUIckControlTargetKey = @"target";
+static NSString * const QUIckControlValueKey = @"value";
+static NSString * const QUIckControlDefaultValueKey = @"default";
 
-@interface KDNControl ()
+@interface QUIckControl ()
 @property (nonatomic, strong) NSMutableDictionary * stateValues;
 @property (nonatomic, strong) NSMutableDictionary * states;
 @property (nonatomic, strong) NSMutableDictionary * defaults;
@@ -64,7 +70,7 @@ static NSString * const KDNControlDefaultValueKey = @"default";
 @property (nonatomic, strong) NSMutableArray * targetsDefaults;
 @end
 
-@implementation KDNControl
+@implementation QUIckControl
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -153,23 +159,27 @@ static NSString * const KDNControlDefaultValueKey = @"default";
 
 -(NSMutableDictionary*)defaultsForTarget:(id)target {
     if (self == target) return self.defaults;
-    
-    return [self.targetsDefaults objectAtIndex:[self.targets indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+    return [self.targetsDefaults objectAtIndex:[self indexOfTarget:target]];
+}
+
+-(NSUInteger)indexOfTarget:(id)target {
+    return [self.targets indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj isEqual:target]) {
             *stop = YES;
             return YES;
         }
         return NO;
-    }]];
+    }];
 }
 
 -(NSMutableDictionary*)valuesForTarget:(id)target {
     if (self == target) return self.stateValues;
     
-    NSUInteger index = [self.targets indexOfObject:target];
+    NSUInteger index = [self indexOfTarget:target];
     if (index == NSNotFound) {
         if ([target conformsToProtocol:@protocol(NSFastEnumeration)]) {
-            target = [[KDNControlArrayWrapper alloc] initWithEnumeratedObject:target];
+            target = [[QUIckControlArrayWrapper alloc] initWithEnumeratedObject:target];
         }
         [self.targets addObject:target];
         [self.values addObject:[NSMutableDictionary dictionary]];
@@ -180,9 +190,16 @@ static NSString * const KDNControlDefaultValueKey = @"default";
     return [self.values objectAtIndex:index];
 }
 
+-(NSMutableDictionary*)valuesForExistingTarget:(id)target {
+    if (self == target) return self.stateValues;
+    
+    NSUInteger index = [self indexOfTarget:target];
+    return index != NSNotFound ? [self.values objectAtIndex:index] : nil;
+}
+
 -(void)registerState:(UIControlState)state forBoolKeyPath:(NSString*)keyPath inverted:(BOOL)inverted {
     // & UIControlStateApplication ?
-    [self.states setObject:@{KDNControlBoolKeyPathKey:keyPath, KDNControlInvertedKey:@(inverted)} forKey:@(state)];
+    [self.states setObject:@{QUIckControlBoolKeyPathKey:keyPath, QUIckControlInvertedKey:@(inverted)} forKey:@(state)];
 }
 
 -(void)applyState:(UIControlState)state {
@@ -196,16 +213,17 @@ static NSString * const KDNControlDefaultValueKey = @"default";
 }
 
 -(void)applyValuesForTarget:(id)target forState:(UIControlState)state {
-    NSDictionary * values = [self valuesForTarget:target];
     NSDictionary * defaults = [self defaultsForTarget:target];
+    NSDictionary * values = [self valuesForExistingTarget:target];
     for (NSString * key in values) {
         id value = [[values objectForKey:key] objectForKey:@(state)] ?: [defaults objectForKey:key];
         [target setValue:value forKeyPath:key];
     }
 }
 
--(BOOL)needBorder {
-    return YES;
+-(id)valueForTarget:(id)target forKey:(NSString*)key forState:(UIControlState)state {
+    NSDictionary * keyValues = [[self valuesForExistingTarget:target] objectForKey:key];
+    return [keyValues objectForKey:@(state)] ?: [[self defaultsForTarget:target] objectForKey:key];
 }
 
 -(void)applyCurrentState {
@@ -218,9 +236,9 @@ static NSString * const KDNControlDefaultValueKey = @"default";
     for (NSNumber * stateValue in self.states) {
         UIControlState substate = [stateValue unsignedIntegerValue];
         NSDictionary * boolProperty = [self.states objectForKey:stateValue];
-        BOOL stateEnabled = [[boolProperty objectForKey:KDNControlInvertedKey] boolValue] ?
-        ![[self valueForKeyPath:[boolProperty objectForKey:KDNControlBoolKeyPathKey]] boolValue] :
-        [[self valueForKeyPath:[boolProperty objectForKey:KDNControlBoolKeyPathKey]] boolValue];
+        BOOL stateEnabled = [[boolProperty objectForKey:QUIckControlInvertedKey] boolValue] ?
+        ![[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue] :
+        [[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue];
         
         if (stateEnabled) {
             state |= substate;

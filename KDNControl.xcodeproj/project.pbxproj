@@ -14,7 +14,7 @@
 		A428E9C91DB38F91008DE27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A428E9C81DB38F91008DE27C /* Assets.xcassets */; };
 		A428E9CC1DB38F91008DE27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A428E9CA1DB38F91008DE27C /* LaunchScreen.storyboard */; };
 		A428E9D71DB38F91008DE27C /* KDNControlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9D61DB38F91008DE27C /* KDNControlTests.m */; };
-		A428E9E41DB38FCD008DE27C /* KDNControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9E31DB38FCD008DE27C /* KDNControl.m */; };
+		A428E9E41DB38FCD008DE27C /* QUIckControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9E31DB38FCD008DE27C /* QUIckControl.m */; };
 		A428E9E81DB3F70F008DE27C /* PincodeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9E71DB3F70F008DE27C /* PincodeControl.m */; };
 /* End PBXBuildFile section */
 
@@ -42,8 +42,8 @@
 		A428E9D21DB38F91008DE27C /* KDNControlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KDNControlTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A428E9D61DB38F91008DE27C /* KDNControlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KDNControlTests.m; sourceTree = "<group>"; };
 		A428E9D81DB38F91008DE27C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A428E9E21DB38FCD008DE27C /* KDNControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDNControl.h; sourceTree = "<group>"; };
-		A428E9E31DB38FCD008DE27C /* KDNControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDNControl.m; sourceTree = "<group>"; };
+		A428E9E21DB38FCD008DE27C /* QUIckControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QUIckControl.h; sourceTree = "<group>"; };
+		A428E9E31DB38FCD008DE27C /* QUIckControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QUIckControl.m; sourceTree = "<group>"; };
 		A428E9E61DB3F70F008DE27C /* PincodeControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PincodeControl.h; path = PincodeControl/PincodeControl.h; sourceTree = "<group>"; };
 		A428E9E71DB3F70F008DE27C /* PincodeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PincodeControl.m; path = PincodeControl/PincodeControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,7 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				A428E9E51DB3F6B0008DE27C /* PincodeControl */,
-				A428E9E11DB38FA9008DE27C /* KDNControl */,
+				A428E9E11DB38FA9008DE27C /* QUIckControl */,
 				A428E9BF1DB38F91008DE27C /* AppDelegate.h */,
 				A428E9C01DB38F91008DE27C /* AppDelegate.m */,
 				A428E9C21DB38F91008DE27C /* ViewController.h */,
@@ -119,13 +119,13 @@
 			path = KDNControlTests;
 			sourceTree = "<group>";
 		};
-		A428E9E11DB38FA9008DE27C /* KDNControl */ = {
+		A428E9E11DB38FA9008DE27C /* QUIckControl */ = {
 			isa = PBXGroup;
 			children = (
-				A428E9E21DB38FCD008DE27C /* KDNControl.h */,
-				A428E9E31DB38FCD008DE27C /* KDNControl.m */,
+				A428E9E21DB38FCD008DE27C /* QUIckControl.h */,
+				A428E9E31DB38FCD008DE27C /* QUIckControl.m */,
 			);
-			name = KDNControl;
+			name = QUIckControl;
 			sourceTree = "<group>";
 		};
 		A428E9E51DB3F6B0008DE27C /* PincodeControl */ = {
@@ -238,7 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A428E9C41DB38F91008DE27C /* ViewController.m in Sources */,
-				A428E9E41DB38FCD008DE27C /* KDNControl.m in Sources */,
+				A428E9E41DB38FCD008DE27C /* QUIckControl.m in Sources */,
 				A428E9C11DB38F91008DE27C /* AppDelegate.m in Sources */,
 				A428E9E81DB3F70F008DE27C /* PincodeControl.m in Sources */,
 				A428E9BE1DB38F91008DE27C /* main.m in Sources */,
@@ -432,6 +432,7 @@
 				A428E9DD1DB38F91008DE27C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A428E9DE1DB38F91008DE27C /* Build configuration list for PBXNativeTarget "KDNControlTests" */ = {
 			isa = XCConfigurationList;
@@ -440,6 +441,7 @@
 				A428E9E01DB38F91008DE27C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
