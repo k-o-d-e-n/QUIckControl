@@ -59,12 +59,12 @@ static NSString * const QUIckControlBoolKeyPathKey = @"boolKey";
 static NSString * const QUIckControlInvertedKey = @"inverted";
 static NSString * const QUIckControlTargetKey = @"target";
 static NSString * const QUIckControlValueKey = @"value";
-static NSString * const QUIckControlDefaultValueKey = @"default";
 
 @interface QUIckControl ()
 @property (nonatomic) BOOL isTransitionTime;
 @property (nonatomic, strong) NSMutableDictionary * stateValues;
 @property (nonatomic, strong) NSMutableDictionary * states;
+@property (nonatomic, strong) NSMutableArray * intersectingStates;
 @property (nonatomic, strong) NSMutableDictionary * defaults;
 @property (nonatomic, strong) NSMutableArray * targets;
 @property (nonatomic, strong) NSMutableArray * values;
@@ -101,6 +101,7 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     self.states = [NSMutableDictionary dictionary];
     self.stateValues = [NSMutableDictionary dictionary];
     self.defaults = [NSMutableDictionary dictionary];
+    self.intersectingStates = [NSMutableArray array];
     
     self.targets = [NSMutableArray array];
     self.values = [NSMutableArray array];
@@ -154,6 +155,11 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     }
 }
 
+-(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state {
+    [self.intersectingStates addObject:@(state)];
+    [self setValue:value forTarget:target forKeyPath:key forState:~state];
+}
+
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state {
     [self setValue:value forTarget:self forKeyPath:key forState:state];
 }
@@ -178,7 +184,6 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     [values setObject:keyValues forKey:key];
     id defaultValue = [target valueForKeyPath:key];
     if (defaultValue) {
-//        [keyValues setObject:defaultValue forKey:KDNControlDefaultValueKey];
         [[self defaultsForTarget:target] setObject:defaultValue forKey:key];
     }
     
@@ -250,14 +255,35 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     NSDictionary * defaults = [self defaultsForTarget:target];
     NSDictionary * values = [self valuesForExistingTarget:target];
     for (NSString * key in values) {
-        id value = [[values objectForKey:key] objectForKey:@(state)] ?: [defaults objectForKey:key];
+        id value = [self valueForKey:key fromValues:values forState:state defaults:defaults];
         [target setValue:value forKeyPath:key];
     }
 }
 
+-(id)valueForKey:(NSString*)key fromValues:(NSDictionary*)values forState:(UIControlState)state defaults:(NSDictionary*)defaults {
+    id keyValues = [values objectForKey:key];
+    id value = [keyValues objectForKey:@(state)];
+    if (!value) {
+        NSUInteger intersectStateIndex = [self.intersectingStates indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (state & [obj unsignedIntegerValue]) {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        if (intersectStateIndex != NSNotFound) {
+            value = [keyValues objectForKey:@(~[[self.intersectingStates objectAtIndex:intersectStateIndex] unsignedIntegerValue])];
+        }
+        if (!value) {
+            value = [defaults objectForKey:key];
+        }
+    }
+    
+    return value;
+}
+
 -(id)valueForTarget:(id)target forKey:(NSString*)key forState:(UIControlState)state {
-    NSDictionary * keyValues = [[self valuesForExistingTarget:target] objectForKey:key];
-    return [keyValues objectForKey:@(state)] ?: [[self defaultsForTarget:target] objectForKey:key];
+    return [self valueForKey:key fromValues:[self valuesForExistingTarget:target] forState:state defaults:[self defaultsForTarget:target]];
 }
 
 -(void)applyCurrentState {

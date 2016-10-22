@@ -76,6 +76,7 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
     [self.pincodeControl setValue:[UIColor colorWithWhite:112.0/255.0 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateNormal];
     [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateHighlighted];
     [self.pincodeControl addTarget:self action:@selector(pincodeTypeComplete:) forControlEvents:PincodeControlEventTypeComplete];
+    [self.pincodeControl setValue:@1 forTarget:self.pincodeControl forKeyPath:keyPath(UIView, layer.borderWidth) forAllStatesContained:UIControlStateHighlighted];
     [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PincodeControl, elementPath) forState:UIControlStateHighlighted];
 }
 
