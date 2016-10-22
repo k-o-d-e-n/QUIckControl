@@ -25,11 +25,47 @@
 
 @end
 
+@interface ValueApplier : NSObject
+@property (nonatomic) id defaultValue;
+@property (nonatomic, weak) PincodeControl * control;
+@end
+
 @interface PincodeControl ()
+@property (nonatomic, strong) ValueApplier * applier;
 @property (nonatomic, strong) NSMutableString * text;
 @property (nonatomic, readwrite) IBInspectable NSUInteger codeLength;
 @property (nonatomic) BOOL filled;
 @property (nonatomic) BOOL valid;
+@property (nonatomic, readonly) NSArray<CAShapeLayer*>* sublayers;
+@property (nonatomic, strong) UIBezierPath * defaultPath;
+@end
+
+@implementation ValueApplier
+
+-(instancetype)initWithControl:(PincodeControl*)control {
+    if (self = [super init]) {
+        _control = control;
+    }
+    
+    return self;
+}
+
+-(void)setValue:(id)value forKey:(NSString *)key {
+    if (![key isEqual:keyPath(CAShapeLayer, fillColor)] || self.control.codeLength == self.control.code.length) {
+        [self.control.sublayers setValue:value forKey:key];
+        return;
+    }
+    
+    for (short i = 0; i < self.control.codeLength; ++i) {
+        [self.control.sublayers[i] setValue:i < self.control.code.length ? (id)self.control.fillColor.CGColor : value
+                                           forKey:key];
+    }
+}
+
+-(id)valueForKey:(NSString *)key {
+    return [self.control.sublayers valueForKey:key];
+}
+
 @end
 
 @implementation PincodeControl
@@ -43,8 +79,10 @@
     return self;
 }
 
--(instancetype)initWithCodeLength:(NSUInteger)codeLength {
+-(instancetype)initWithCodeLength:(NSUInteger)codeLength sideSize:(CGFloat)sideSize {
     if (self = [self initWithFrame:CGRectZero]) {
+        _spaceBetweenItems = 15;
+        self.sideSize = sideSize;
         self.codeLength = codeLength;
     }
     
@@ -60,10 +98,26 @@
     return self;
 }
 
+-(NSArray<CAShapeLayer *> *)sublayers {
+    return (NSArray*)self.layer.sublayers;
+}
+
+-(NSString *)code {
+    return [self.text copy];
+}
+
+-(void)setSideSize:(CGFloat)sideSize {
+    _sideSize = sideSize;
+    self.defaultPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, self.sideSize, self.sideSize)];
+}
+
 -(void)setFilled:(BOOL)filled {
     if (_filled != filled) {
         _filled = filled;
         [self applyCurrentState];
+        if (filled) {
+            [self sendActionsForControlEvents:PincodeControlEventTypeComplete];
+        }
     }
 }
 
@@ -82,6 +136,7 @@
 -(void)loadInstances {
     _valid = YES;
     self.text = [[NSMutableString alloc] init];
+    self.applier = [[ValueApplier alloc] initWithControl:self];
     [self registerState:PincodeControlStateFilled forBoolKeyPath:keyPath(PincodeControl, filled) inverted:NO];
     [self registerState:PincodeControlStateInvalid forBoolKeyPath:keyPath(PincodeControl, valid) inverted:YES];
 }
@@ -89,7 +144,9 @@
 -(void)loadSublayers {
     for (NSUInteger i = 0; i < self.codeLength; ++i) {
         CAShapeLayer * sublayer = [CAShapeLayer layer];
-        sublayer.borderWidth = 1;
+        sublayer.actions = @{keyPath(CAShapeLayer, fillColor):[NSNull null], keyPath(CAShapeLayer, lineWidth):[NSNull null],
+                             keyPath(CAShapeLayer, strokeColor):[NSNull null]};
+        sublayer.lineWidth = 1;
         sublayer.fillColor = [UIColor clearColor].CGColor;
         
         [self.layer addSublayer:sublayer];
@@ -103,32 +160,37 @@
 }
 
 -(void)layoutCodeItemLayers {
-    CGFloat itemWidth = (self.bounds.size.width - (self.spaceBetweenItems * (self.codeLength - 1))) / self.codeLength;
+    CGFloat fullWidth = (self.codeLength * (self.sideSize)) + (self.codeLength - 1) * self.spaceBetweenItems;
+    CGFloat originX = CGRectGetMidX(self.bounds) - (fullWidth / 2);
     for (NSUInteger i = 0; i < self.layer.sublayers.count; ++i) {
         CAShapeLayer * sublayer = (CAShapeLayer*)self.layer.sublayers[i];
-        [sublayer setFrame:CGRectMake((itemWidth * i) + (i * self.spaceBetweenItems), CGRectGetMidY(self.bounds) - itemWidth / 2, itemWidth, itemWidth)];
-        sublayer.cornerRadius = itemWidth / 2;
-        sublayer.path = [UIBezierPath bezierPathWithOvalInRect:sublayer.bounds].CGPath;
+        [sublayer setFrame:CGRectMake(originX + (i * (self.spaceBetweenItems + self.sideSize)), CGRectGetMidY(self.bounds) - self.sideSize / 2, self.sideSize, self.sideSize)];
+        sublayer.cornerRadius = self.sideSize / 2;
+        sublayer.path = self.elementPath.CGPath ?: self.defaultPath.CGPath;
     }
+}
+
+-(void)clear {
+    [self deleteCharactersInRange:NSMakeRange(0, self.text.length)];
+    [self performTransition:^{
+        _filled = NO;
+        _valid = YES;
+    }];
 }
 
 #pragma mark - UIControl
 
 -(void)setBorderWidth:(CGFloat)borderWidth forState:(UIControlState)state {
-    [self setValue:@(borderWidth) forTarget:self.layer.sublayers forKeyPath:keyPath(CALayer, borderWidth) forState:state];
+    [self setValue:@(borderWidth) forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, lineWidth) forState:state];
 }
 
 -(void)setBorderColor:(UIColor*)borderColor forState:(UIControlState)state {
-    [self setValue:(id)borderColor.CGColor forTarget:self.layer.sublayers forKeyPath:keyPath(CALayer, borderColor) forState:state];
+    [self setValue:(id)borderColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, strokeColor) forState:state];
 }
 
 -(void)setFillColor:(UIColor*)fillColor forState:(UIControlState)state {
-    [self setValue:(id)fillColor.CGColor forTarget:self.layer.sublayers forKeyPath:keyPath(CAShapeLayer, fillColor) forState:state];
+    [self setValue:(id)fillColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, fillColor) forState:state];
 }
-
-//-(UIControlState)state {
-//    return self.valid ? [super state] | PincodeControlStateInvalid : [super state];
-//}
 
 #pragma mark - UIResponder
 
@@ -157,26 +219,35 @@
     return self.text.length > 0;
 }
 
-// TODO: Make performStateChanges for multiply state transition. And add possible set bool state property without apply content
 -(void)deleteBackward {
     if ([self hasText]) {
         if (self.text.length == self.codeLength) {
+            [self beginTransition];
             _filled = NO;
             _valid = YES;
-            [self applyCurrentState];
         }
-        [self.text deleteCharactersInRange:NSMakeRange(self.text.length - 1, 1)];
-        [self.layer.sublayers[self.text.length] setBackgroundColor:(CGColorRef)[self valueForTarget:self.layer.sublayers forKey:keyPath(CALayer, backgroundColor) forState:self.state]];
+        [self deleteCharactersInRange:NSMakeRange(self.text.length - 1, 1)];
+        [self commitTransition];
     }
+}
+
+-(void)deleteCharactersInRange:(NSRange)range {
+    [self.text deleteCharactersInRange:range];
+    NSArray * elements = [self.layer.sublayers subarrayWithRange:range];
+    [elements setValue:[self valueForTarget:self.applier forKey:keyPath(CAShapeLayer, fillColor) forState:self.state] forKey:keyPath(CAShapeLayer, fillColor)];
+    [elements setValue:@1 forKey:keyPath(CAShapeLayer, lineWidth)];
 }
 
 -(void)insertText:(NSString *)text {
     if (self.text.length < self.codeLength) {
-        [self.layer.sublayers[self.text.length] setBackgroundColor:self.fillColor.CGColor];
+        [self.sublayers[self.text.length] setFillColor:self.fillColor.CGColor];
+        [self.sublayers[self.text.length] setLineWidth:0];
         [self.text appendString:text];
         if (self.text.length == self.codeLength) {
-            self.filled = YES;
-            self.valid = [self isMeetRequirements:self.text];
+            [self performTransition:^{
+                self.filled = YES;
+                self.valid = [self isMeetRequirements:self.text];
+            }];
         }
     }
 }

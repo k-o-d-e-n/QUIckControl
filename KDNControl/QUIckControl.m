@@ -62,6 +62,7 @@ static NSString * const QUIckControlValueKey = @"value";
 static NSString * const QUIckControlDefaultValueKey = @"default";
 
 @interface QUIckControl ()
+@property (nonatomic) BOOL isTransitionTime;
 @property (nonatomic, strong) NSMutableDictionary * stateValues;
 @property (nonatomic, strong) NSMutableDictionary * states;
 @property (nonatomic, strong) NSMutableDictionary * defaults;
@@ -127,10 +128,37 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     }
 }
 
+-(void)beginTransition {
+    self.isTransitionTime = YES;
+}
+
+-(void)commitTransition {
+    if (!self.isTransitionTime) return;
+    
+    self.isTransitionTime = NO;
+    [self applyCurrentState];
+}
+
+-(void)performTransition:(void(^)())transition {
+    [self beginTransition];
+    transition();
+    [self commitTransition];
+}
+
+-(void)removeValuesForTarget:(id)target {
+    NSUInteger targetIndex = [self indexOfTarget:target];
+    if (targetIndex != NSNotFound) {
+        [self.targets removeObjectAtIndex:targetIndex];
+        [self.values removeObjectAtIndex:targetIndex];
+        [self.targetsDefaults removeObjectAtIndex:targetIndex];
+    }
+}
+
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state {
     [self setValue:value forTarget:self forKeyPath:key forState:state];
 }
 
+// TODO: Create possible add values for multiple states
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forState:(UIControlState)state {
     NSMutableDictionary * values = [self valuesForTarget:target];
     NSMutableDictionary * valuesForKey = [values objectForKey:key];
@@ -202,7 +230,13 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     [self.states setObject:@{QUIckControlBoolKeyPathKey:keyPath, QUIckControlInvertedKey:@(inverted)} forKey:@(state)];
 }
 
+-(void)applyCurrentStateForTarget:(id)target {
+    [self applyValuesForTarget:target forState:self.state];
+}
+
 -(void)applyState:(UIControlState)state {
+    if (self.isTransitionTime) return;
+    
     [self setNeedsDisplay];
     [self setNeedsLayout];
     
@@ -236,11 +270,10 @@ static NSString * const QUIckControlDefaultValueKey = @"default";
     for (NSNumber * stateValue in self.states) {
         UIControlState substate = [stateValue unsignedIntegerValue];
         NSDictionary * boolProperty = [self.states objectForKey:stateValue];
-        BOOL stateEnabled = [[boolProperty objectForKey:QUIckControlInvertedKey] boolValue] ?
-        ![[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue] :
-        [[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue];
+        BOOL inverted = [[boolProperty objectForKey:QUIckControlInvertedKey] boolValue];
+        BOOL propertyValue = [[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue];
         
-        if (stateEnabled) {
+        if (propertyValue ^ inverted) {
             state |= substate;
         }
     }

@@ -36,4 +36,10 @@
     }];
 }
 
+-(void)testInverted {
+    BOOL inverted = YES;
+    BOOL boolProperty = YES;
+    XCTAssertTrue(boolProperty ^ inverted);
+}
+
 @end

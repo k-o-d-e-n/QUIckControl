@@ -35,8 +35,8 @@ static const UIControlState ExampleState = 1 << 16;
 static const UIControlState QUIckControlStateOpaque = 1 << 16;
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *dependedLabel;
 @property (weak, nonatomic) IBOutlet QUIckControl *control;
-@property (weak, nonatomic) IBOutlet UIButton *testButton;
 @property (weak, nonatomic) ExampleControl * example;
 @property (weak, nonatomic) IBOutlet PincodeControl *pincodeControl;
 @end
@@ -65,9 +65,39 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
     [self.pincodeControl setBorderColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [self.pincodeControl setFillColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled];
     [self.pincodeControl setFillColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled | UIControlStateHighlighted];
-    [self.pincodeControl setFillColor:[UIColor clearColor] forState:UIControlStateHighlighted];
+    [self.pincodeControl setBorderColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled];
+    [self.pincodeControl setBorderColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled | UIControlStateHighlighted];
+//    [self.pincodeControl setFillColor:[UIColor clearColor] forState:UIControlStateHighlighted];
     [self.pincodeControl setFillColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid];
     [self.pincodeControl setFillColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid | UIControlStateHighlighted];
+    [self.pincodeControl setBorderColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid];
+    [self.pincodeControl setBorderColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid | UIControlStateHighlighted];
+    
+    [self.pincodeControl setValue:[UIColor colorWithWhite:112.0/255.0 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateNormal];
+    [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateHighlighted];
+    [self.pincodeControl addTarget:self action:@selector(pincodeTypeComplete:) forControlEvents:PincodeControlEventTypeComplete];
+    [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PincodeControl, elementPath) forState:UIControlStateHighlighted];
+}
+
+-(UIBezierPath *)starShape:(CGRect)frame {
+    UIBezierPath* bezierPath = [UIBezierPath bezierPath];
+    [bezierPath moveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.50000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.05000 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.67634 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.30729 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.97553 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.39549 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.78532 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.64271 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.79389 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.95451 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.50000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.85000 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.20611 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.95451 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.21468 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.64271 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.02447 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.39549 * CGRectGetHeight(frame))];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.32366 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.30729 * CGRectGetHeight(frame))];
+    [bezierPath closePath];
+    
+    return bezierPath;
+}
+
+-(void)pincodeTypeComplete:(PincodeControl*)control {
+    NSLog(@"%@", control.code);
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -77,12 +107,10 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
 
 -(void)controlTouchUpInside:(QUIckControl*)control {
     [control setSelected:!control.isSelected];
+    if (!control.isSelected) {
+        [self.control removeValuesForTarget:self.example];
+    }
 //    self.example.exampleState = control.isSelected;
-}
-
-- (IBAction)testButton:(UIButton *)sender {
-    [sender setSelected:!sender.isSelected];
-    self.control.opaque = self.testButton.isSelected;
 }
 
 @end
