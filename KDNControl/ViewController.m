@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "PincodeControl.h"
+#import "PinCodeControl.h"
 
 @interface ExampleControl : QUIckControl
 @property (nonatomic) BOOL exampleState;
@@ -37,8 +37,8 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *dependedLabel;
 @property (weak, nonatomic) IBOutlet QUIckControl *control;
-@property (weak, nonatomic) ExampleControl * example;
-@property (weak, nonatomic) IBOutlet PincodeControl *pincodeControl;
+@property (weak, nonatomic) IBOutlet ExampleControl *example;
+@property (weak, nonatomic) IBOutlet PinCodeControl *pincodeControl;
 @end
 
 @implementation ViewController
@@ -54,30 +54,14 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
     [self.control setValue:[UIColor yellowColor] forKeyPath:keyPath(UIView, backgroundColor) forState:UIControlStateHighlighted];
     [self.control addTarget:self action:@selector(controlTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     
-    ExampleControl * example = [[ExampleControl alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-//    [example setValue:[UIColor grayColor] forKeyPath:keyPath(ExampleControl, backgroundColor) forState:ExampleState];
-    [self.view addSubview:example]; self.example = example;
     [self.control setValue:[UIColor grayColor] forTarget:self.example forKeyPath:keyPath(ExampleControl, backgroundColor) forState:UIControlStateSelected];
     [self.control setValue:@5 forTarget:self.example forKeyPath:keyPath(ExampleControl, layer.borderWidth) forState:UIControlStateSelected];
-    
-    self.pincodeControl.fillColor = [UIColor whiteColor];
-    [self.pincodeControl setBorderColor:[UIColor colorWithRed:86.0/255.0 green:86.0/255.0 blue:86.0/255.0 alpha:1.0] forState:UIControlStateNormal];
-    [self.pincodeControl setBorderColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [self.pincodeControl setFillColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled];
-    [self.pincodeControl setFillColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled | UIControlStateHighlighted];
-    [self.pincodeControl setBorderColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled];
-    [self.pincodeControl setBorderColor:[UIColor colorWithRed:1 green:176.0/255.0 blue:89.0/255.0 alpha:1] forState:PincodeControlStateFilled | UIControlStateHighlighted];
-//    [self.pincodeControl setFillColor:[UIColor clearColor] forState:UIControlStateHighlighted];
-    [self.pincodeControl setFillColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid];
-    [self.pincodeControl setFillColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid | UIControlStateHighlighted];
-    [self.pincodeControl setBorderColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid];
-    [self.pincodeControl setBorderColor:[UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1] forState:PincodeControlStateInvalid | UIControlStateHighlighted];
     
     [self.pincodeControl setValue:[UIColor colorWithWhite:112.0/255.0 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateNormal];
     [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.7] forTarget:self.dependedLabel forKeyPath:keyPath(UILabel, textColor) forState:UIControlStateHighlighted];
     [self.pincodeControl addTarget:self action:@selector(pincodeTypeComplete:) forControlEvents:PincodeControlEventTypeComplete];
-    [self.pincodeControl setValue:@1 forTarget:self.pincodeControl forKeyPath:keyPath(UIView, layer.borderWidth) forAllStatesContained:UIControlStateHighlighted];
-    [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PincodeControl, elementPath) forState:UIControlStateHighlighted];
+    [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.3] forTarget:self.pincodeControl forKeyPath:keyPath(UIView, backgroundColor) forAllStatesContained:UIControlStateHighlighted];
+    [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PinCodeControl, itemPath) forState:UIControlStateHighlighted];
 }
 
 -(UIBezierPath *)starShape:(CGRect)frame {
@@ -97,7 +81,7 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
     return bezierPath;
 }
 
--(void)pincodeTypeComplete:(PincodeControl*)control {
+-(void)pincodeTypeComplete:(PinCodeControl*)control {
     NSLog(@"%@", control.code);
 }
 
@@ -108,10 +92,7 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
 
 -(void)controlTouchUpInside:(QUIckControl*)control {
     [control setSelected:!control.isSelected];
-    if (!control.isSelected) {
-        [self.control removeValuesForTarget:self.example];
-    }
-//    self.example.exampleState = control.isSelected;
+    self.example.exampleState = control.isSelected;
 }
 
 @end

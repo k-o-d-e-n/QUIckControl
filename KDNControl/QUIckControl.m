@@ -59,12 +59,13 @@ static NSString * const QUIckControlBoolKeyPathKey = @"boolKey";
 static NSString * const QUIckControlInvertedKey = @"inverted";
 static NSString * const QUIckControlTargetKey = @"target";
 static NSString * const QUIckControlValueKey = @"value";
+static NSString * const QUIckControlIntersectedKey = @"intersected";
 
+// TODO: Make class contained target and him values.
 @interface QUIckControl ()
 @property (nonatomic) BOOL isTransitionTime;
 @property (nonatomic, strong) NSMutableDictionary * stateValues;
 @property (nonatomic, strong) NSMutableDictionary * states;
-@property (nonatomic, strong) NSMutableArray * intersectingStates;
 @property (nonatomic, strong) NSMutableDictionary * defaults;
 @property (nonatomic, strong) NSMutableArray * targets;
 @property (nonatomic, strong) NSMutableArray * values;
@@ -101,7 +102,6 @@ static NSString * const QUIckControlValueKey = @"value";
     self.states = [NSMutableDictionary dictionary];
     self.stateValues = [NSMutableDictionary dictionary];
     self.defaults = [NSMutableDictionary dictionary];
-    self.intersectingStates = [NSMutableArray array];
     
     self.targets = [NSMutableArray array];
     self.values = [NSMutableArray array];
@@ -156,8 +156,8 @@ static NSString * const QUIckControlValueKey = @"value";
 }
 
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state {
-    [self.intersectingStates addObject:@(state)];
     [self setValue:value forTarget:target forKeyPath:key forState:~state];
+    [[[[self valuesForTarget:target] objectForKey:key] objectForKey:QUIckControlIntersectedKey] addObject:@(state)];
 }
 
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state {
@@ -181,6 +181,7 @@ static NSString * const QUIckControlValueKey = @"value";
 // TODO: values should be object with this method
 -(NSMutableDictionary*)registerKey:(NSString*)key forValues:(NSMutableDictionary*)values withTarget:(id)target {
     NSMutableDictionary * keyValues = [NSMutableDictionary dictionary];
+    [keyValues setObject:[NSMutableArray array] forKey:QUIckControlIntersectedKey];
     [values setObject:keyValues forKey:key];
     id defaultValue = [target valueForKeyPath:key];
     if (defaultValue) {
@@ -264,15 +265,16 @@ static NSString * const QUIckControlValueKey = @"value";
     id keyValues = [values objectForKey:key];
     id value = [keyValues objectForKey:@(state)];
     if (!value) {
-        NSUInteger intersectStateIndex = [self.intersectingStates indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray * intersectedStates = [keyValues objectForKey:QUIckControlIntersectedKey];
+        NSUInteger intersectedIndex = [intersectedStates indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (state & [obj unsignedIntegerValue]) {
                 *stop = YES;
                 return YES;
             }
             return NO;
         }];
-        if (intersectStateIndex != NSNotFound) {
-            value = [keyValues objectForKey:@(~[[self.intersectingStates objectAtIndex:intersectStateIndex] unsignedIntegerValue])];
+        if (intersectedIndex != NSNotFound) {
+            value = [keyValues objectForKey:@(~[[intersectedStates objectAtIndex:intersectedIndex] unsignedIntegerValue])];
         }
         if (!value) {
             value = [defaults objectForKey:key];

@@ -16,9 +16,10 @@
 -(void)commitTransition; // close transition process and apply changes. If call without beginTransition not effect - for update you should use applyCurrentState method.
 -(void)performTransition:(void(^)())transition; // block wrapper for beginTransition and commitTransition
 
+// in good case this methods should use only inside subclass
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forState:(UIControlState)state;
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state;
--(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state; // in good case should use only in superclass, or inside subclass
+-(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state;
 -(void)registerState:(UIControlState)state forBoolKeyPath:(NSString*)keyPath inverted:(BOOL)inverted;
 -(void)removeValuesForTarget:(id)target;
 

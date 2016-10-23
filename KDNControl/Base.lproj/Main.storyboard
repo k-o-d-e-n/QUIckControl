@@ -17,13 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5KK-5D-Klj" customClass="QUIckControl">
-                                <rect key="frame" x="180" y="236" width="240" height="128"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hVd-FG-VKj" customClass="PincodeControl">
-                                <rect key="frame" x="20" y="105" width="240" height="128"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hVd-FG-VKj" customClass="PinCodeControl">
+                                <rect key="frame" x="0.0" y="189" width="600" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="3Iv-iP-yZ1"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="codeLength">
                                         <integer key="value" value="4"/>
@@ -36,24 +35,53 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JLM-AG-aL9">
-                                <rect key="frame" x="92" y="54" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JLM-AG-aL9">
+                                <rect key="frame" x="260.5" y="138" width="79.5" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xrM-LY-aSg" customClass="ExampleControl">
+                                <rect key="frame" x="0.0" y="0.0" width="148" height="100"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="148" id="LOP-if-tjx"/>
+                                    <constraint firstAttribute="height" constant="100" id="xst-2T-9iO"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5KK-5D-Klj" customClass="QUIckControl">
+                                <rect key="frame" x="148" y="0.0" width="452" height="128"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="G9j-qL-5pY"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.16862745100000001" green="0.14901960780000001" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="xrM-LY-aSg" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="2ju-AB-tR1"/>
+                            <constraint firstAttribute="trailing" secondItem="hVd-FG-VKj" secondAttribute="trailing" id="7VU-Lq-kfO"/>
+                            <constraint firstAttribute="trailing" secondItem="5KK-5D-Klj" secondAttribute="trailing" id="AnD-WI-4he"/>
+                            <constraint firstItem="5KK-5D-Klj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="C22-uL-ysx"/>
+                            <constraint firstItem="JLM-AG-aL9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Sl7-TQ-zlf"/>
+                            <constraint firstItem="hVd-FG-VKj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Wg0-lD-SRv"/>
+                            <constraint firstItem="hVd-FG-VKj" firstAttribute="top" secondItem="JLM-AG-aL9" secondAttribute="bottom" constant="30" id="lkH-Lb-K4l"/>
+                            <constraint firstItem="xrM-LY-aSg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nRb-sk-3BU"/>
+                            <constraint firstItem="5KK-5D-Klj" firstAttribute="leading" secondItem="xrM-LY-aSg" secondAttribute="trailing" id="s0q-0i-lqw"/>
+                            <constraint firstItem="JLM-AG-aL9" firstAttribute="top" secondItem="5KK-5D-Klj" secondAttribute="bottom" constant="10" id="s5m-v2-0gH"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="control" destination="5KK-5D-Klj" id="phy-E3-Zoo"/>
                         <outlet property="dependedLabel" destination="JLM-AG-aL9" id="gER-jG-Lhb"/>
+                        <outlet property="example" destination="xrM-LY-aSg" id="Dds-z1-HOt"/>
                         <outlet property="pincodeControl" destination="hVd-FG-VKj" id="nG1-Sb-FlC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="853" y="486"/>
         </scene>
     </scenes>
 </document>

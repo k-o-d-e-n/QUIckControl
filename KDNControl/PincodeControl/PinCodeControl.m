@@ -6,7 +6,7 @@
 //  Copyright © 2016 Denis Koryttsev. All rights reserved.
 //
 
-#import "PincodeControl.h"
+#import "PinCodeControl.h"
 
 @interface NSString (PincodeControl)
 -(void)enumerateCharacters:(void(^)(NSString* character, NSUInteger index, BOOL * stop))enumerator;
@@ -27,10 +27,10 @@
 
 @interface ValueApplier : NSObject
 @property (nonatomic) id defaultValue;
-@property (nonatomic, weak) PincodeControl * control;
+@property (nonatomic, weak) PinCodeControl * control;
 @end
 
-@interface PincodeControl ()
+@interface PinCodeControl ()
 @property (nonatomic, strong) ValueApplier * applier;
 @property (nonatomic, strong) NSMutableString * text;
 @property (nonatomic, readwrite) IBInspectable NSUInteger codeLength;
@@ -42,7 +42,7 @@
 
 @implementation ValueApplier
 
--(instancetype)initWithControl:(PincodeControl*)control {
+-(instancetype)initWithControl:(PinCodeControl*)control {
     if (self = [super init]) {
         _control = control;
     }
@@ -57,7 +57,7 @@
     }
     
     for (short i = 0; i < self.control.codeLength; ++i) {
-        [self.control.sublayers[i] setValue:i < self.control.code.length ? (id)self.control.fillColor.CGColor : value
+        [self.control.sublayers[i] setValue:i < self.control.code.length ? (id)self.control.filledItemColor.CGColor : value
                                            forKey:key];
     }
 }
@@ -68,12 +68,11 @@
 
 @end
 
-@implementation PincodeControl
+@implementation PinCodeControl
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self loadInstances];
-        [self loadSublayers];
+        [self initializeInstance];
     }
     
     return self;
@@ -91,11 +90,17 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self loadInstances];
-        [self loadSublayers];
+        [self initializeInstance];
     }
     
     return self;
+}
+
+-(void)initializeInstance {
+    [self registerState:PincodeControlStateFilled forBoolKeyPath:keyPath(PinCodeControl, filled) inverted:NO];
+    [self registerState:PincodeControlStateInvalid forBoolKeyPath:keyPath(PinCodeControl, valid) inverted:YES];
+    [self loadDefaultsAndUtils];
+    [self loadSublayers];
 }
 
 -(NSArray<CAShapeLayer *> *)sublayers {
@@ -133,12 +138,22 @@
     [self loadSublayers];
 }
 
--(void)loadInstances {
+-(void)loadDefaultsAndUtils {
     _valid = YES;
     self.text = [[NSMutableString alloc] init];
     self.applier = [[ValueApplier alloc] initWithControl:self];
-    [self registerState:PincodeControlStateFilled forBoolKeyPath:keyPath(PincodeControl, filled) inverted:NO];
-    [self registerState:PincodeControlStateInvalid forBoolKeyPath:keyPath(PincodeControl, valid) inverted:YES];
+    self.filledItemColor = [UIColor grayColor];
+    
+    UIColor * filledColor = [UIColor colorWithRed:76.0/255.0 green:145.0/255.0 blue:65.0/255.0 alpha:1];
+    UIColor * invalidColor = [UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1];
+    [self setBorderColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self setBorderColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [self setFillColor:filledColor forState:PincodeControlStateFilled];
+    [self setBorderColor:filledColor forState:PincodeControlStateFilled];
+    [self setFillColor:filledColor forState:PincodeControlStateFilled | UIControlStateHighlighted];
+    [self setBorderColor:filledColor forState:PincodeControlStateFilled | UIControlStateHighlighted];
+    [self setFillColor:invalidColor forIntersectedState:PincodeControlStateInvalid | PincodeControlStateFilled];
+    [self setBorderColor:invalidColor forIntersectedState:PincodeControlStateInvalid | PincodeControlStateFilled];
 }
 
 -(void)loadSublayers {
@@ -165,8 +180,7 @@
     for (NSUInteger i = 0; i < self.layer.sublayers.count; ++i) {
         CAShapeLayer * sublayer = (CAShapeLayer*)self.layer.sublayers[i];
         [sublayer setFrame:CGRectMake(originX + (i * (self.spaceBetweenItems + self.sideSize)), CGRectGetMidY(self.bounds) - self.sideSize / 2, self.sideSize, self.sideSize)];
-        sublayer.cornerRadius = self.sideSize / 2;
-        sublayer.path = self.elementPath.CGPath ?: self.defaultPath.CGPath;
+        sublayer.path = self.itemPath.CGPath ?: self.defaultPath.CGPath;
     }
 }
 
@@ -179,6 +193,18 @@
 }
 
 #pragma mark - UIControl
+
+-(void)setBorderWidth:(CGFloat)borderWidth forIntersectedState:(UIControlState)state {
+    [self setValue:@(borderWidth) forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, lineWidth) forAllStatesContained:state];
+}
+
+-(void)setBorderColor:(UIColor*)borderColor forIntersectedState:(UIControlState)state {
+    [self setValue:(id)borderColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, strokeColor) forAllStatesContained:state];
+}
+
+-(void)setFillColor:(UIColor*)fillColor forIntersectedState:(UIControlState)state {
+    [self setValue:(id)fillColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, fillColor) forAllStatesContained:state];
+}
 
 -(void)setBorderWidth:(CGFloat)borderWidth forState:(UIControlState)state {
     [self setValue:@(borderWidth) forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, lineWidth) forState:state];
@@ -235,18 +261,16 @@
     [self.text deleteCharactersInRange:range];
     NSArray * elements = [self.layer.sublayers subarrayWithRange:range];
     [elements setValue:[self valueForTarget:self.applier forKey:keyPath(CAShapeLayer, fillColor) forState:self.state] forKey:keyPath(CAShapeLayer, fillColor)];
-    [elements setValue:@1 forKey:keyPath(CAShapeLayer, lineWidth)];
 }
 
 -(void)insertText:(NSString *)text {
     if (self.text.length < self.codeLength) {
-        [self.sublayers[self.text.length] setFillColor:self.fillColor.CGColor];
-        [self.sublayers[self.text.length] setLineWidth:0];
+        [self.sublayers[self.text.length] setFillColor:self.filledItemColor.CGColor];
         [self.text appendString:text];
         if (self.text.length == self.codeLength) {
             [self performTransition:^{
                 self.filled = YES;
-                self.valid = [self isMeetRequirements:self.text];
+                self.valid = [self validate:self.text];
             }];
         }
     }
@@ -266,7 +290,9 @@
 
 #pragma mark - Validation
 
--(BOOL)isMeetRequirements:(NSString*)pin {
+-(BOOL)validate:(NSString*)pin {
+    if (self.validationBlock) return self.validationBlock([pin copy]);
+    
     __block BOOL isEqual = YES;
     __block BOOL isIncremented = YES;
     __block BOOL isDecremented = YES;
