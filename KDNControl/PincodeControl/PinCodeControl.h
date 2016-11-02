@@ -8,9 +8,9 @@
 
 #import "QUIckControl.h"
 
-static const UIControlState PincodeControlStateFilled = 1 << 16;
-static const UIControlState PincodeControlStateInvalid = 1 << 17;
-static const UIControlEvents PincodeControlEventTypeComplete = 1 << 24;
+static const UIControlState PinCodeControlStateFilled = 1 << 16;
+static const UIControlState PinCodeControlStateInvalid = 1 << 17;
+static const UIControlEvents PinCodeControlEventTypeComplete = 1 << 24;
 
 @interface PinCodeControl : QUIckControl<UIKeyInput>
 
@@ -33,6 +33,8 @@ static const UIControlEvents PincodeControlEventTypeComplete = 1 << 24;
 @property (nonatomic, readonly) BOOL valid;
 
 @property (nonatomic, copy) BOOL(^validationBlock)(NSString * code);
+
+@property (nonatomic) BOOL shouldUseDefaultValidation;
 
 // color for fill code item when user input code symbol
 @property (nonatomic) UIColor * filledItemColor;

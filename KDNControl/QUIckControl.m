@@ -55,6 +55,40 @@
 
 @end
 
+@interface QUIckControlActionTargetImp : NSObject<QUIckControlActionTarget>
+@property (nonatomic, weak) QUIckControl * parentControl;
+@property (nonatomic) UIControlEvents events;
+@property (nonatomic, copy) void(^action)(__weak QUIckControl* control);
+
+-(instancetype)initWithControl:(QUIckControl*)control controlEvents:(UIControlEvents)events;
+
+@end
+
+@implementation QUIckControlActionTargetImp
+
+-(instancetype)initWithControl:(QUIckControl *)control controlEvents:(UIControlEvents)events {
+    if (self = [super init]) {
+        _events = events;
+        _parentControl = control;
+    }
+    
+    return self;
+}
+
+-(void)actionSelector:(QUIckControl*)control {
+    if (self.action) self.action(self.parentControl);
+}
+
+-(void)start {
+    [self.parentControl addTarget:self action:@selector(actionSelector:) forControlEvents:self.events];
+}
+
+-(void)stop {
+    [self.parentControl removeTarget:self action:@selector(actionSelector:) forControlEvents:self.events];
+}
+
+@end
+
 static NSString * const QUIckControlBoolKeyPathKey = @"boolKey";
 static NSString * const QUIckControlInvertedKey = @"inverted";
 static NSString * const QUIckControlTargetKey = @"target";
@@ -70,6 +104,8 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 @property (nonatomic, strong) NSMutableArray * targets;
 @property (nonatomic, strong) NSMutableArray * values;
 @property (nonatomic, strong) NSMutableArray * targetsDefaults;
+@property (nonatomic, strong) NSMutableSet * scheduledActions;
+@property (nonatomic, strong) NSPointerArray * actionTargets;
 @end
 
 @implementation QUIckControl
@@ -106,6 +142,9 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     self.targets = [NSMutableArray array];
     self.values = [NSMutableArray array];
     self.targetsDefaults = [NSMutableArray array];
+    
+    self.scheduledActions = [NSMutableSet set];
+    self.actionTargets = [[NSPointerArray alloc] initWithOptions:NSPointerFunctionsStrongMemory];
 }
 
 -(void)setSelected:(BOOL)selected {
@@ -138,12 +177,22 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     
     self.isTransitionTime = NO;
     [self applyCurrentState];
+    for (NSNumber * action in self.scheduledActions) {
+        [self sendActionsForControlEvents:[action unsignedIntegerValue]];
+    }
+    [self.scheduledActions removeAllObjects];
 }
 
 -(void)performTransition:(void(^)())transition {
     [self beginTransition];
     transition();
     [self commitTransition];
+}
+
+-(void)sendActionsForControlEvents:(UIControlEvents)controlEvents {
+    if (self.isTransitionTime) { [self.scheduledActions addObject:@(controlEvents)]; return; }
+    
+    [super sendActionsForControlEvents:controlEvents];
 }
 
 -(void)removeValuesForTarget:(id)target {
@@ -155,6 +204,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     }
 }
 
+// TODO: Create possible set value for inverted state (current state not contained state)
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state {
     [self setValue:value forTarget:target forKeyPath:key forState:~state];
     [[[[self valuesForTarget:target] objectForKey:key] objectForKey:QUIckControlIntersectedKey] addObject:@(state)];
@@ -174,7 +224,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     value ? [valuesForKey setObject:value forKey:@(state)] : [valuesForKey removeObjectForKey:@(state)];
     
     if (self.state == state) {
-        [self applyState:state];
+        [self applyCurrentStateForTarget:target]; // TODO: Apply only this value
     }
 }
 
@@ -261,13 +311,15 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     }
 }
 
+// intersected states not corrected working if two intersected states mathed in current state and contained values for same key.
 -(id)valueForKey:(NSString*)key fromValues:(NSDictionary*)values forState:(UIControlState)state defaults:(NSDictionary*)defaults {
     id keyValues = [values objectForKey:key];
     id value = [keyValues objectForKey:@(state)];
     if (!value) {
         NSArray * intersectedStates = [keyValues objectForKey:QUIckControlIntersectedKey];
         NSUInteger intersectedIndex = [intersectedStates indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (state & [obj unsignedIntegerValue]) {
+            UIControlState intersectedState = [obj unsignedIntegerValue];
+            if ((state & intersectedState) == intersectedState) {
                 *stop = YES;
                 return YES;
             }
@@ -292,6 +344,23 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     [self applyState:self.state];
 }
 
+-(QUIckControlActionTarget)addAction:(void (^)(__kindof QUIckControl *__weak))action forControlEvents:(UIControlEvents)events {
+    QUIckControlActionTargetImp * actionTarget = [[QUIckControlActionTargetImp alloc] initWithControl:self controlEvents:events];
+    actionTarget.action = action;
+    [self.actionTargets addPointer:(__bridge void * _Nullable)(actionTarget)];
+    
+    return actionTarget;
+}
+
+-(QUIckControlActionTarget)addActionTarget:(QUIckControlActionTarget)target {
+    QUIckControlActionTargetImp * sourceTarget = (QUIckControlActionTargetImp*)target;
+    QUIckControlActionTargetImp * actionTarget = [[QUIckControlActionTargetImp alloc] initWithControl:self controlEvents:sourceTarget.events];
+    actionTarget.action = sourceTarget.action;
+    [self.actionTargets addPointer:(__bridge void * _Nullable)(actionTarget)];
+    
+    return actionTarget;
+}
+
 - (UIControlState)state {
     UIControlState state = UIControlStateNormal;
     
@@ -307,6 +376,13 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     }
     
     return state;
+}
+
+-(void)dealloc {
+    for (QUIckControlActionTarget target in self.actionTargets) {
+        [target stop];
+    }
+    self.actionTargets.count = 0;
 }
 
 @end

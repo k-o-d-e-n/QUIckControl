@@ -10,6 +10,12 @@
 
 #define keyPath(class, key) ((class *)nil).key ? @#key : @#key
 
+@protocol QUIckControlActionTarget <NSObject>
+-(void)start;
+-(void)stop;
+@end
+typedef id<QUIckControlActionTarget> QUIckControlActionTarget;
+
 @interface QUIckControl : UIControl
 
 -(void)beginTransition; // after call this method applyCurrentState method not effect
@@ -27,5 +33,8 @@
 -(void)applyCurrentStateForTarget:(id)target;
 
 -(id)valueForTarget:(id)target forKey:(NSString*)key forState:(UIControlState)state;
+
+-(QUIckControlActionTarget)addAction:(void(^)(__kindof __weak QUIckControl* control))action forControlEvents:(UIControlEvents)events;
+-(QUIckControlActionTarget)addActionTarget:(QUIckControlActionTarget)target; // TODO: Remove it, this bad implementation, need other solution
 
 @end
