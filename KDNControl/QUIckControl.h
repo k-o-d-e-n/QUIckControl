@@ -7,14 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QUIckControlActionTarget.h"
 
 #define keyPath(class, key) ((class *)nil).key ? @#key : @#key
-
-@protocol QUIckControlActionTarget <NSObject>
--(void)start;
--(void)stop;
-@end
-typedef id<QUIckControlActionTarget> QUIckControlActionTarget;
 
 @interface QUIckControl : UIControl
 
@@ -23,6 +18,7 @@ typedef id<QUIckControlActionTarget> QUIckControlActionTarget;
 -(void)performTransition:(void(^)())transition; // block wrapper for beginTransition and commitTransition
 
 // in good case this methods should use only inside subclass
+-(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forInvertedState:(UIControlState)state;
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forState:(UIControlState)state;
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state;
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state;

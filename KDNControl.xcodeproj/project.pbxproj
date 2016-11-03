@@ -16,6 +16,10 @@
 		A428E9D71DB38F91008DE27C /* KDNControlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9D61DB38F91008DE27C /* KDNControlTests.m */; };
 		A428E9E41DB38FCD008DE27C /* QUIckControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9E31DB38FCD008DE27C /* QUIckControl.m */; };
 		A428E9E81DB3F70F008DE27C /* PinCodeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A428E9E71DB3F70F008DE27C /* PinCodeControl.m */; };
+		A499FB451DCA8EFE003624B0 /* QUIckControlActionTargetImp.m in Sources */ = {isa = PBXBuildFile; fileRef = A499FB441DCA8EFE003624B0 /* QUIckControlActionTargetImp.m */; };
+		A499FB491DCA9120003624B0 /* QUIckControlArrayWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A499FB481DCA9120003624B0 /* QUIckControlArrayWrapper.m */; };
+		A499FB4C1DCA9260003624B0 /* QUIckControlValueTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = A499FB4B1DCA9260003624B0 /* QUIckControlValueTarget.m */; };
+		A499FB4F1DCAA910003624B0 /* QUIckControlValue.m in Sources */ = {isa = PBXBuildFile; fileRef = A499FB4E1DCAA910003624B0 /* QUIckControlValue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,15 @@
 		A428E9E31DB38FCD008DE27C /* QUIckControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QUIckControl.m; sourceTree = "<group>"; };
 		A428E9E61DB3F70F008DE27C /* PinCodeControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinCodeControl.h; path = PincodeControl/PinCodeControl.h; sourceTree = "<group>"; };
 		A428E9E71DB3F70F008DE27C /* PinCodeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinCodeControl.m; path = PincodeControl/PinCodeControl.m; sourceTree = "<group>"; };
+		A499FB431DCA8EFE003624B0 /* QUIckControlActionTargetImp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlActionTargetImp.h; path = QUIckControl/QUIckControlActionTargetImp.h; sourceTree = "<group>"; };
+		A499FB441DCA8EFE003624B0 /* QUIckControlActionTargetImp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlActionTargetImp.m; path = QUIckControl/QUIckControlActionTargetImp.m; sourceTree = "<group>"; };
+		A499FB461DCA8F73003624B0 /* QUIckControlActionTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QUIckControlActionTarget.h; sourceTree = "<group>"; };
+		A499FB471DCA9120003624B0 /* QUIckControlArrayWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlArrayWrapper.h; path = QUIckControl/QUIckControlArrayWrapper.h; sourceTree = "<group>"; };
+		A499FB481DCA9120003624B0 /* QUIckControlArrayWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlArrayWrapper.m; path = QUIckControl/QUIckControlArrayWrapper.m; sourceTree = "<group>"; };
+		A499FB4A1DCA9260003624B0 /* QUIckControlValueTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QUIckControlValueTarget.h; sourceTree = "<group>"; };
+		A499FB4B1DCA9260003624B0 /* QUIckControlValueTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QUIckControlValueTarget.m; sourceTree = "<group>"; };
+		A499FB4D1DCAA910003624B0 /* QUIckControlValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlValue.h; path = QUIckControl/QUIckControlValue.h; sourceTree = "<group>"; };
+		A499FB4E1DCAA910003624B0 /* QUIckControlValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlValue.m; path = QUIckControl/QUIckControlValue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +135,7 @@
 		A428E9E11DB38FA9008DE27C /* QUIckControl */ = {
 			isa = PBXGroup;
 			children = (
+				A499FB421DCA8EB6003624B0 /* QUIckControlPrivate */,
 				A428E9E21DB38FCD008DE27C /* QUIckControl.h */,
 				A428E9E31DB38FCD008DE27C /* QUIckControl.m */,
 			);
@@ -135,6 +149,22 @@
 				A428E9E71DB3F70F008DE27C /* PinCodeControl.m */,
 			);
 			name = PincodeControl;
+			sourceTree = "<group>";
+		};
+		A499FB421DCA8EB6003624B0 /* QUIckControlPrivate */ = {
+			isa = PBXGroup;
+			children = (
+				A499FB431DCA8EFE003624B0 /* QUIckControlActionTargetImp.h */,
+				A499FB441DCA8EFE003624B0 /* QUIckControlActionTargetImp.m */,
+				A499FB461DCA8F73003624B0 /* QUIckControlActionTarget.h */,
+				A499FB471DCA9120003624B0 /* QUIckControlArrayWrapper.h */,
+				A499FB481DCA9120003624B0 /* QUIckControlArrayWrapper.m */,
+				A499FB4A1DCA9260003624B0 /* QUIckControlValueTarget.h */,
+				A499FB4B1DCA9260003624B0 /* QUIckControlValueTarget.m */,
+				A499FB4D1DCAA910003624B0 /* QUIckControlValue.h */,
+				A499FB4E1DCAA910003624B0 /* QUIckControlValue.m */,
+			);
+			name = QUIckControlPrivate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +272,10 @@
 				A428E9C11DB38F91008DE27C /* AppDelegate.m in Sources */,
 				A428E9E81DB3F70F008DE27C /* PinCodeControl.m in Sources */,
 				A428E9BE1DB38F91008DE27C /* main.m in Sources */,
+				A499FB491DCA9120003624B0 /* QUIckControlArrayWrapper.m in Sources */,
+				A499FB4C1DCA9260003624B0 /* QUIckControlValueTarget.m in Sources */,
+				A499FB4F1DCAA910003624B0 /* QUIckControlValue.m in Sources */,
+				A499FB451DCA8EFE003624B0 /* QUIckControlActionTargetImp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

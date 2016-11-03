@@ -65,6 +65,8 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
     } forControlEvents:UIControlEventTouchUpInside] start];
     [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.3] forTarget:self.pincodeControl forKeyPath:keyPath(UIView, backgroundColor) forAllStatesContained:UIControlStateHighlighted];
     [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PinCodeControl, itemPath) forState:UIControlStateHighlighted];
+    [self.pincodeControl setValue:@5 forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, layer.cornerRadius) forInvertedState:PinCodeControlStateFilled];
+    [self.pincodeControl setValue:[UIColor grayColor] forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, backgroundColor) forInvertedState:UIControlStateHighlighted];
 }
 
 -(UIBezierPath *)starShape:(CGRect)frame {
