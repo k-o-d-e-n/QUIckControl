@@ -1,0 +1,490 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A4372D441DCE73AE0005FBBC /* QUIckControlActionTargetImp.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D3E1DCE73AE0005FBBC /* QUIckControlActionTargetImp.m */; };
+		A4372D451DCE73AE0005FBBC /* QUIckControlValue.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D411DCE73AE0005FBBC /* QUIckControlValue.m */; };
+		A4372D461DCE73AE0005FBBC /* QUIckControlValueTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D431DCE73AE0005FBBC /* QUIckControlValueTarget.m */; };
+		A4372D4A1DCE73E30005FBBC /* QUIckControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D481DCE73E30005FBBC /* QUIckControl.m */; };
+		A4372D4D1DCE73F70005FBBC /* PinCodeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D4C1DCE73F70005FBBC /* PinCodeControl.m */; };
+		A4372D521DCE74150005FBBC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D4F1DCE74150005FBBC /* AppDelegate.m */; };
+		A4372D531DCE74150005FBBC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D511DCE74150005FBBC /* ViewController.m */; };
+		A4372D551DCE74790005FBBC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4372D541DCE74790005FBBC /* Assets.xcassets */; };
+		A4372D571DCE74860005FBBC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4372D561DCE74860005FBBC /* Info.plist */; };
+		A4372D591DCE74AC0005FBBC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D581DCE74AC0005FBBC /* main.m */; };
+		A4372D5E1DCE75400005FBBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4372D5A1DCE75400005FBBC /* LaunchScreen.storyboard */; };
+		A4372D5F1DCE75400005FBBC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4372D5C1DCE75400005FBBC /* Main.storyboard */; };
+		A4372D641DCE76E40005FBBC /* KDNControlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4372D611DCE75F30005FBBC /* KDNControlTests.m */; };
+		A4372D651DCE76ED0005FBBC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4372D601DCE75F30005FBBC /* Info.plist */; };
+		A479130D1DCEBB830063D244 /* QUICStateDescriptorKey.m in Sources */ = {isa = PBXBuildFile; fileRef = A479130C1DCEBB830063D244 /* QUICStateDescriptorKey.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A428E9D31DB38F91008DE27C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A428E9B11DB38F90008DE27C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A428E9B81DB38F91008DE27C;
+			remoteInfo = KDNControl;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A428E9B91DB38F91008DE27C /* QUIckControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QUIckControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A428E9D21DB38F91008DE27C /* QUIckControl.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QUIckControl.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4372D3D1DCE73AE0005FBBC /* QUIckControlActionTargetImp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlActionTargetImp.h; path = QUIckControl/QUIckControl/QUIckControlActionTargetImp.h; sourceTree = SOURCE_ROOT; };
+		A4372D3E1DCE73AE0005FBBC /* QUIckControlActionTargetImp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlActionTargetImp.m; path = QUIckControl/QUIckControl/QUIckControlActionTargetImp.m; sourceTree = SOURCE_ROOT; };
+		A4372D3F1DCE73AE0005FBBC /* QUIckControlPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlPrivate.h; path = QUIckControl/QUIckControl/QUIckControlPrivate.h; sourceTree = SOURCE_ROOT; };
+		A4372D401DCE73AE0005FBBC /* QUIckControlValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlValue.h; path = QUIckControl/QUIckControl/QUIckControlValue.h; sourceTree = SOURCE_ROOT; };
+		A4372D411DCE73AE0005FBBC /* QUIckControlValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlValue.m; path = QUIckControl/QUIckControl/QUIckControlValue.m; sourceTree = SOURCE_ROOT; };
+		A4372D421DCE73AE0005FBBC /* QUIckControlValueTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlValueTarget.h; path = QUIckControl/QUIckControl/QUIckControlValueTarget.h; sourceTree = SOURCE_ROOT; };
+		A4372D431DCE73AE0005FBBC /* QUIckControlValueTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControlValueTarget.m; path = QUIckControl/QUIckControl/QUIckControlValueTarget.m; sourceTree = SOURCE_ROOT; };
+		A4372D471DCE73E30005FBBC /* QUIckControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControl.h; path = QUIckControl/QUIckControl/QUIckControl.h; sourceTree = SOURCE_ROOT; };
+		A4372D481DCE73E30005FBBC /* QUIckControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUIckControl.m; path = QUIckControl/QUIckControl/QUIckControl.m; sourceTree = SOURCE_ROOT; };
+		A4372D491DCE73E30005FBBC /* QUIckControlActionTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUIckControlActionTarget.h; path = QUIckControl/QUIckControl/QUIckControlActionTarget.h; sourceTree = SOURCE_ROOT; };
+		A4372D4B1DCE73F70005FBBC /* PinCodeControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinCodeControl.h; path = QUIckControl/PincodeControl/PinCodeControl.h; sourceTree = SOURCE_ROOT; };
+		A4372D4C1DCE73F70005FBBC /* PinCodeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinCodeControl.m; path = QUIckControl/PincodeControl/PinCodeControl.m; sourceTree = SOURCE_ROOT; };
+		A4372D4E1DCE74150005FBBC /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = QUIckControl/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		A4372D4F1DCE74150005FBBC /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = QUIckControl/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		A4372D501DCE74150005FBBC /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = QUIckControl/ViewController.h; sourceTree = SOURCE_ROOT; };
+		A4372D511DCE74150005FBBC /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = QUIckControl/ViewController.m; sourceTree = SOURCE_ROOT; };
+		A4372D541DCE74790005FBBC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = QUIckControl/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		A4372D561DCE74860005FBBC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = QUIckControl/Info.plist; sourceTree = SOURCE_ROOT; };
+		A4372D581DCE74AC0005FBBC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = QUIckControl/main.m; sourceTree = SOURCE_ROOT; };
+		A4372D5B1DCE75400005FBBC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = QUIckControl/Base.lproj/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		A4372D5D1DCE75400005FBBC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = QUIckControl/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
+		A4372D601DCE75F30005FBBC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = QUIckControlTests/Info.plist; sourceTree = SOURCE_ROOT; };
+		A4372D611DCE75F30005FBBC /* KDNControlTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDNControlTests.m; path = QUIckControlTests/KDNControlTests.m; sourceTree = SOURCE_ROOT; };
+		A479130B1DCEBB830063D244 /* QUICStateDescriptorKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QUICStateDescriptorKey.h; path = QUIckControl/QUIckControl/QUICStateDescriptorKey.h; sourceTree = SOURCE_ROOT; };
+		A479130C1DCEBB830063D244 /* QUICStateDescriptorKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QUICStateDescriptorKey.m; path = QUIckControl/QUIckControl/QUICStateDescriptorKey.m; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A428E9B61DB38F91008DE27C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A428E9CF1DB38F91008DE27C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A428E9B01DB38F90008DE27C = {
+			isa = PBXGroup;
+			children = (
+				A428E9BB1DB38F91008DE27C /* QUIckControl */,
+				A428E9D51DB38F91008DE27C /* KDNControlTests */,
+				A428E9BA1DB38F91008DE27C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A428E9BA1DB38F91008DE27C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A428E9B91DB38F91008DE27C /* QUIckControl.app */,
+				A428E9D21DB38F91008DE27C /* QUIckControl.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A428E9BB1DB38F91008DE27C /* QUIckControl */ = {
+			isa = PBXGroup;
+			children = (
+				A4372D5A1DCE75400005FBBC /* LaunchScreen.storyboard */,
+				A4372D5C1DCE75400005FBBC /* Main.storyboard */,
+				A4372D561DCE74860005FBBC /* Info.plist */,
+				A4372D541DCE74790005FBBC /* Assets.xcassets */,
+				A4372D4E1DCE74150005FBBC /* AppDelegate.h */,
+				A4372D4F1DCE74150005FBBC /* AppDelegate.m */,
+				A4372D501DCE74150005FBBC /* ViewController.h */,
+				A4372D511DCE74150005FBBC /* ViewController.m */,
+				A428E9E51DB3F6B0008DE27C /* PincodeControl */,
+				A428E9E11DB38FA9008DE27C /* QUIckControl */,
+				A428E9BC1DB38F91008DE27C /* Supporting Files */,
+			);
+			name = QUIckControl;
+			path = KDNControl;
+			sourceTree = "<group>";
+		};
+		A428E9BC1DB38F91008DE27C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A4372D581DCE74AC0005FBBC /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A428E9D51DB38F91008DE27C /* KDNControlTests */ = {
+			isa = PBXGroup;
+			children = (
+				A4372D601DCE75F30005FBBC /* Info.plist */,
+				A4372D611DCE75F30005FBBC /* KDNControlTests.m */,
+			);
+			path = KDNControlTests;
+			sourceTree = "<group>";
+		};
+		A428E9E11DB38FA9008DE27C /* QUIckControl */ = {
+			isa = PBXGroup;
+			children = (
+				A4372D471DCE73E30005FBBC /* QUIckControl.h */,
+				A4372D481DCE73E30005FBBC /* QUIckControl.m */,
+				A4372D491DCE73E30005FBBC /* QUIckControlActionTarget.h */,
+				A499FB421DCA8EB6003624B0 /* QUIckControlPrivate */,
+			);
+			name = QUIckControl;
+			sourceTree = "<group>";
+		};
+		A428E9E51DB3F6B0008DE27C /* PincodeControl */ = {
+			isa = PBXGroup;
+			children = (
+				A4372D4B1DCE73F70005FBBC /* PinCodeControl.h */,
+				A4372D4C1DCE73F70005FBBC /* PinCodeControl.m */,
+			);
+			name = PincodeControl;
+			sourceTree = "<group>";
+		};
+		A499FB421DCA8EB6003624B0 /* QUIckControlPrivate */ = {
+			isa = PBXGroup;
+			children = (
+				A479130B1DCEBB830063D244 /* QUICStateDescriptorKey.h */,
+				A479130C1DCEBB830063D244 /* QUICStateDescriptorKey.m */,
+				A4372D3D1DCE73AE0005FBBC /* QUIckControlActionTargetImp.h */,
+				A4372D3E1DCE73AE0005FBBC /* QUIckControlActionTargetImp.m */,
+				A4372D3F1DCE73AE0005FBBC /* QUIckControlPrivate.h */,
+				A4372D401DCE73AE0005FBBC /* QUIckControlValue.h */,
+				A4372D411DCE73AE0005FBBC /* QUIckControlValue.m */,
+				A4372D421DCE73AE0005FBBC /* QUIckControlValueTarget.h */,
+				A4372D431DCE73AE0005FBBC /* QUIckControlValueTarget.m */,
+			);
+			name = QUIckControlPrivate;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A428E9B81DB38F91008DE27C /* QUIckControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A428E9DB1DB38F91008DE27C /* Build configuration list for PBXNativeTarget "QUIckControl" */;
+			buildPhases = (
+				A428E9B51DB38F91008DE27C /* Sources */,
+				A428E9B61DB38F91008DE27C /* Frameworks */,
+				A428E9B71DB38F91008DE27C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QUIckControl;
+			productName = KDNControl;
+			productReference = A428E9B91DB38F91008DE27C /* QUIckControl.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A428E9D11DB38F91008DE27C /* QUIckControlTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A428E9DE1DB38F91008DE27C /* Build configuration list for PBXNativeTarget "QUIckControlTests" */;
+			buildPhases = (
+				A428E9CE1DB38F91008DE27C /* Sources */,
+				A428E9CF1DB38F91008DE27C /* Frameworks */,
+				A428E9D01DB38F91008DE27C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A428E9D41DB38F91008DE27C /* PBXTargetDependency */,
+			);
+			name = QUIckControlTests;
+			productName = KDNControlTests;
+			productReference = A428E9D21DB38F91008DE27C /* QUIckControl.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A428E9B11DB38F90008DE27C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Denis Koryttsev";
+				TargetAttributes = {
+					A428E9B81DB38F91008DE27C = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					A428E9D11DB38F91008DE27C = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = A428E9B81DB38F91008DE27C;
+					};
+				};
+			};
+			buildConfigurationList = A428E9B41DB38F91008DE27C /* Build configuration list for PBXProject "QUIckControl" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A428E9B01DB38F90008DE27C;
+			productRefGroup = A428E9BA1DB38F91008DE27C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A428E9B81DB38F91008DE27C /* QUIckControl */,
+				A428E9D11DB38F91008DE27C /* QUIckControlTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A428E9B71DB38F91008DE27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4372D5E1DCE75400005FBBC /* LaunchScreen.storyboard in Resources */,
+				A4372D571DCE74860005FBBC /* Info.plist in Resources */,
+				A4372D551DCE74790005FBBC /* Assets.xcassets in Resources */,
+				A4372D5F1DCE75400005FBBC /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A428E9D01DB38F91008DE27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4372D651DCE76ED0005FBBC /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A428E9B51DB38F91008DE27C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4372D451DCE73AE0005FBBC /* QUIckControlValue.m in Sources */,
+				A4372D521DCE74150005FBBC /* AppDelegate.m in Sources */,
+				A4372D441DCE73AE0005FBBC /* QUIckControlActionTargetImp.m in Sources */,
+				A4372D531DCE74150005FBBC /* ViewController.m in Sources */,
+				A4372D4A1DCE73E30005FBBC /* QUIckControl.m in Sources */,
+				A4372D4D1DCE73F70005FBBC /* PinCodeControl.m in Sources */,
+				A479130D1DCEBB830063D244 /* QUICStateDescriptorKey.m in Sources */,
+				A4372D591DCE74AC0005FBBC /* main.m in Sources */,
+				A4372D461DCE73AE0005FBBC /* QUIckControlValueTarget.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A428E9CE1DB38F91008DE27C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4372D641DCE76E40005FBBC /* KDNControlTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A428E9D41DB38F91008DE27C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A428E9B81DB38F91008DE27C /* QUIckControl */;
+			targetProxy = A428E9D31DB38F91008DE27C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A4372D5A1DCE75400005FBBC /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A4372D5B1DCE75400005FBBC /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A4372D5C1DCE75400005FBBC /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A4372D5D1DCE75400005FBBC /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A428E9D91DB38F91008DE27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A428E9DA1DB38F91008DE27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A428E9DC1DB38F91008DE27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "$(SRCROOT)/QUIckControl/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControl;
+				PRODUCT_NAME = QUIckControl;
+			};
+			name = Debug;
+		};
+		A428E9DD1DB38F91008DE27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "$(SRCROOT)/QUIckControl/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControl;
+				PRODUCT_NAME = QUIckControl;
+			};
+			name = Release;
+		};
+		A428E9DF1DB38F91008DE27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = QUIckControlTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlTests;
+				PRODUCT_NAME = QUIckControl;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QUIckControl.app/QUIckControl";
+			};
+			name = Debug;
+		};
+		A428E9E01DB38F91008DE27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = QUIckControlTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlTests;
+				PRODUCT_NAME = QUIckControl;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QUIckControl.app/QUIckControl";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A428E9B41DB38F91008DE27C /* Build configuration list for PBXProject "QUIckControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A428E9D91DB38F91008DE27C /* Debug */,
+				A428E9DA1DB38F91008DE27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A428E9DB1DB38F91008DE27C /* Build configuration list for PBXNativeTarget "QUIckControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A428E9DC1DB38F91008DE27C /* Debug */,
+				A428E9DD1DB38F91008DE27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A428E9DE1DB38F91008DE27C /* Build configuration list for PBXNativeTarget "QUIckControlTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A428E9DF1DB38F91008DE27C /* Debug */,
+				A428E9E01DB38F91008DE27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A428E9B11DB38F90008DE27C /* Project object */;
+}
