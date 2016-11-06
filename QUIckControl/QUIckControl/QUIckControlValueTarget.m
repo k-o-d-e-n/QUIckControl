@@ -27,32 +27,17 @@
     return self;
 }
 
--(void)setValue:(id)value forKeyPath:(NSString *)key forInvertedState:(UIControlState)state {
-    QUIckControlValue * keyValue = [self.values objectForKey:key];
-    if (!keyValue && value) {
-        keyValue = [self registerKey:key];
-    }
-    [keyValue setValue:value forInvertedState:state];
+-(void)setValue:(id)value forKeyPath:(NSString *)key forStateDescriptor:(QUICStateDescriptor)descriptor {
+    [[self keyValueForKey:key registerIfNeeded:value != nil] setValue:value forStateDescriptor:descriptor];
 }
 
--(void)setValue:(id)value forKeyPath:(NSString *)key forIntersectedState:(UIControlState)state {
+-(QUIckControlValue*)keyValueForKey:(NSString*)key registerIfNeeded:(BOOL)needed {
     QUIckControlValue * keyValue = [self.values objectForKey:key];
-    if (!keyValue && value) {
+    if (!keyValue && needed) {
         keyValue = [self registerKey:key];
     }
-    [keyValue setValue:value forIntersectedState:state];
-}
-
--(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state {
-    QUIckControlValue * keyValue = [self.values objectForKey:key];
-    if (!keyValue && value) {
-        keyValue = [self registerKey:key];
-    }
-    [keyValue setValue:value forState:state];
     
-//    if (self.state == state) {
-//        [self applyCurrentStateForTarget:target]; // TODO: Apply only this value
-//    }
+    return keyValue;
 }
 
 -(QUIckControlValue*)registerKey:(NSString*)key {
@@ -71,6 +56,10 @@
         [self.target setValue:[[self.values objectForKey:key] valueForState:state] ?: [self.defaults objectForKey:key]
                    forKeyPath:key];
     }
+}
+
+-(void)applyValue:(id)value forKey:(NSString*)key {
+    [self.target setValue:value forKeyPath:key];
 }
 
 // intersected states not corrected working if two intersected states mathed in current state and contained values for same key.

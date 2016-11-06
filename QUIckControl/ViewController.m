@@ -35,6 +35,7 @@ static const UIControlState ExampleState = 1 << 16;
 static const UIControlState QUIckControlStateOpaque = 1 << 16;
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) IBOutlet UILabel *dependedLabel;
 @property (weak, nonatomic) IBOutlet QUIckControl *control;
 @property (weak, nonatomic) IBOutlet ExampleControl *example;
@@ -64,9 +65,14 @@ static const UIControlState QUIckControlStateOpaque = 1 << 16;
         NSLog(@"%@", control);
     } forControlEvents:UIControlEventTouchUpInside] start];
     [self.pincodeControl setValue:[UIColor colorWithWhite:1 alpha:.3] forTarget:self.pincodeControl forKeyPath:keyPath(UIView, backgroundColor) forAllStatesContained:UIControlStateHighlighted];
-    [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forKeyPath:keyPath(PinCodeControl, itemPath) forState:UIControlStateHighlighted];
+    [self.pincodeControl setValue:[self starShape:CGRectMake(0, 0, self.pincodeControl.sideSize, self.pincodeControl.sideSize)] forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, itemPath) forAllStatesContained:UIControlStateHighlighted];
     [self.pincodeControl setValue:@5 forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, layer.cornerRadius) forInvertedState:PinCodeControlStateFilled];
-    [self.pincodeControl setValue:[UIColor grayColor] forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, backgroundColor) forInvertedState:UIControlStateHighlighted];
+    [self.pincodeControl setValue:[UIColor brownColor] forTarget:self.pincodeControl forKeyPath:keyPath(PinCodeControl, backgroundColor) forInvertedState:UIControlStateHighlighted];
+    
+    static const UIControlState PinCodeControlStateValid = 1 << 18;
+    [self.pincodeControl registerState:PinCodeControlStateValid forBoolKeyPath:keyPath(PinCodeControl, valid) inverted:NO];
+    [self.pincodeControl setValue:@NO forTarget:self.actionButton forKeyPath:keyPath(UIButton, enabled) forInvertedState:PinCodeControlStateFilled | PinCodeControlStateValid];
+    [self.pincodeControl setValue:@YES forTarget:self.actionButton forKeyPath:keyPath(UIButton, enabled) forAllStatesContained:PinCodeControlStateFilled | PinCodeControlStateValid];
 }
 
 -(UIBezierPath *)starShape:(CGRect)frame {

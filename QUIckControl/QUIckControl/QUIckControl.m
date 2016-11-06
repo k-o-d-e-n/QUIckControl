@@ -7,23 +7,15 @@
 //
 
 #import "QUIckControl.h"
-#import "QUIckControlActionTargetImp.h"
-#import "QUIckControlArrayWrapper.h"
-#import "QUIckControlValueTarget.h"
-
-static NSString * const QUIckControlBoolKeyPathKey = @"boolKey";
-static NSString * const QUIckControlInvertedKey = @"inverted";
-static NSString * const QUIckControlTargetKey = @"target";
-static NSString * const QUIckControlValueKey = @"value";
-static NSString * const QUIckControlIntersectedKey = @"intersected";
+#import "QUIckControlPrivate.h"
 
 @interface QUIckControl ()
 @property (nonatomic) BOOL isTransitionTime;
 @property (nonatomic, strong) QUIckControlValueTarget * thisValueTarget;
-@property (nonatomic, strong) NSMutableDictionary * states;
+@property (nonatomic, strong) NSMutableArray * states;
 @property (nonatomic, strong) NSMutableArray<QUIckControlValueTarget*> * targets;
 @property (nonatomic, strong) NSMutableSet * scheduledActions;
-@property (nonatomic, strong) NSPointerArray * actionTargets;
+@property (nonatomic, strong) NSMutableArray * actionTargets;
 @end
 
 @implementation QUIckControl
@@ -53,13 +45,13 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 }
 
 -(void)loadStorages {
-    self.states = [NSMutableDictionary dictionary];
+    self.states = [NSMutableArray array];
     self.thisValueTarget = [[QUIckControlValueTarget alloc] initWithTarget:self];
     
     self.targets = [NSMutableArray array];
     
     self.scheduledActions = [NSMutableSet set];
-    self.actionTargets = [[NSPointerArray alloc] initWithOptions:NSPointerFunctionsStrongMemory];
+    self.actionTargets = [NSMutableArray array];
 }
 
 #pragma mark - States
@@ -108,7 +100,8 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 
 -(void)registerState:(UIControlState)state forBoolKeyPath:(NSString*)keyPath inverted:(BOOL)inverted {
     // & UIControlStateApplication ?
-    [self.states setObject:@{QUIckControlBoolKeyPathKey:keyPath, QUIckControlInvertedKey:@(inverted)} forKey:@(state)];
+    QUICStateObject * stateObject = [QUICStateObject stateWithProperty:keyPath quickControlState:QUIckControlStateMake(state, inverted)];
+    [self.states addObject:stateObject];
 }
 
 #pragma mark - Actions
@@ -116,7 +109,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 -(QUIckControlActionTarget)addAction:(void (^)(__kindof QUIckControl *__weak))action forControlEvents:(UIControlEvents)events {
     QUIckControlActionTargetImp * actionTarget = [[QUIckControlActionTargetImp alloc] initWithControl:self controlEvents:events];
     actionTarget.action = action;
-    [self.actionTargets addPointer:(__bridge void * _Nullable)(actionTarget)];
+    [self.actionTargets addObject:actionTarget];
     
     return actionTarget;
 }
@@ -125,7 +118,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     QUIckControlActionTargetImp * sourceTarget = (QUIckControlActionTargetImp*)target;
     QUIckControlActionTargetImp * actionTarget = [[QUIckControlActionTargetImp alloc] initWithControl:self controlEvents:sourceTarget.events];
     actionTarget.action = sourceTarget.action;
-    [self.actionTargets addPointer:(__bridge void * _Nullable)(actionTarget)];
+    [self.actionTargets addObject:actionTarget];
     
     return actionTarget;
 }
@@ -146,12 +139,11 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 }
 
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forInvertedState:(UIControlState)state {
-    [[self valueTargetForTarget:target] setValue:value forKeyPath:key forInvertedState:state]; // TODO: Resolve problem with apply value if current state contained inverted state
+    [self setValue:value forTarget:target forKeyPath:key forStateDescriptor:QUICStateDescriptorMake(state, QUICStateTypeInverted)];
 }
 
-// TODO: Create possible set value for inverted state (current state not contained state)
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forAllStatesContained:(UIControlState)state {
-    [[self valueTargetForTarget:target] setValue:value forKeyPath:key forIntersectedState:state]; // TODO: Resolve problem with apply value if current state contained intersected state
+    [self setValue:value forTarget:target forKeyPath:key forStateDescriptor:QUICStateDescriptorMake(state, QUICStateTypeIntersected)];
 }
 
 -(void)setValue:(id)value forKeyPath:(NSString *)key forState:(UIControlState)state {
@@ -160,11 +152,14 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 
 // TODO: Create possible add values for multiple states
 -(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forState:(UIControlState)state {
+    [self setValue:value forTarget:target forKeyPath:key forStateDescriptor:QUICStateDescriptorMake(state, QUICStateTypeUsual)];
+}
+
+-(void)setValue:(id)value forTarget:(id)target forKeyPath:(NSString *)key forStateDescriptor:(QUICStateDescriptor)descr {
     QUIckControlValueTarget * valueTarget = [self valueTargetForTarget:target];
-    [valueTarget setValue:value forKeyPath:key forState:state];
-    
-    if (self.state == state) {
-        [valueTarget applyValuesForState:state]; // TODO: Apply only this value
+    [valueTarget setValue:value forKeyPath:key forStateDescriptor:descr];
+    if (QUICStateEvaluateWithState(descr, self.state)) {
+        [valueTarget applyValue:value forKey:key];
     }
 }
 
@@ -183,9 +178,6 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     
     NSUInteger index = [self indexOfTarget:target];
     if (index == NSNotFound) {
-//        if ([target conformsToProtocol:@protocol(NSFastEnumeration)]) {
-//            target = [[QUIckControlArrayWrapper alloc] initWithEnumeratedObject:target];
-//        }
         QUIckControlValueTarget * valueTarget = [[QUIckControlValueTarget alloc] initWithTarget:target];
         [self.targets addObject:valueTarget];
         index = self.targets.count - 1;
@@ -223,14 +215,9 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
 - (UIControlState)state {
     UIControlState state = UIControlStateNormal;
     
-    for (NSNumber * stateValue in self.states) {
-        UIControlState substate = [stateValue unsignedIntegerValue];
-        NSDictionary * boolProperty = [self.states objectForKey:stateValue];
-        BOOL inverted = [[boolProperty objectForKey:QUIckControlInvertedKey] boolValue];
-        BOOL propertyValue = [[self valueForKeyPath:[boolProperty objectForKey:QUIckControlBoolKeyPathKey]] boolValue];
-        
-        if (propertyValue ^ inverted) {
-            state |= substate;
+    for (QUICStateObject * stateValue in self.states) {
+        if ([stateValue evaluateWithObject:self]) {
+            state |= stateValue.state.controlState;
         }
     }
     
@@ -241,7 +228,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     for (QUIckControlActionTarget target in self.actionTargets) {
         [target stop];
     }
-    self.actionTargets.count = 0;
+    [self.actionTargets removeAllObjects];
 }
 
 @end

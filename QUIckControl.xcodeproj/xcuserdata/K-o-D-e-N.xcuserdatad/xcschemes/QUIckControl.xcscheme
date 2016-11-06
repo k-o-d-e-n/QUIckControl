@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A428E9B81DB38F91008DE27C"
-               BuildableName = "KDNControl.app"
-               BlueprintName = "KDNControl"
-               ReferencedContainer = "container:KDNControl.xcodeproj">
+               BuildableName = "QUIckControl.app"
+               BlueprintName = "QUIckControl"
+               ReferencedContainer = "container:QUIckControl.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A428E9D11DB38F91008DE27C"
-               BuildableName = "KDNControlTests.xctest"
-               BlueprintName = "KDNControlTests"
-               ReferencedContainer = "container:KDNControl.xcodeproj">
+               BuildableName = "QUIckControl.xctest"
+               BlueprintName = "QUIckControlTests"
+               ReferencedContainer = "container:QUIckControl.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A428E9B81DB38F91008DE27C"
-            BuildableName = "KDNControl.app"
-            BlueprintName = "KDNControl"
-            ReferencedContainer = "container:KDNControl.xcodeproj">
+            BuildableName = "QUIckControl.app"
+            BlueprintName = "QUIckControl"
+            ReferencedContainer = "container:QUIckControl.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A428E9B81DB38F91008DE27C"
-            BuildableName = "KDNControl.app"
-            BlueprintName = "KDNControl"
-            ReferencedContainer = "container:KDNControl.xcodeproj">
+            BuildableName = "QUIckControl.app"
+            BlueprintName = "QUIckControl"
+            ReferencedContainer = "container:QUIckControl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A428E9B81DB38F91008DE27C"
-            BuildableName = "KDNControl.app"
-            BlueprintName = "KDNControl"
-            ReferencedContainer = "container:KDNControl.xcodeproj">
+            BuildableName = "QUIckControl.app"
+            BlueprintName = "QUIckControl"
+            ReferencedContainer = "container:QUIckControl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

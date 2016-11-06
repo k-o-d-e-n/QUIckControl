@@ -148,10 +148,16 @@
     UIColor * invalidColor = [UIColor colorWithRed:250.0/255.0 green:88.0/255.0 blue:87.0/255.0 alpha:1];
     [self setBorderColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self setBorderColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [self setFillColor:filledColor forState:PinCodeControlStateFilled];
-    [self setBorderColor:filledColor forState:PinCodeControlStateFilled];
-    [self setFillColor:filledColor forState:PinCodeControlStateFilled | UIControlStateHighlighted];
-    [self setBorderColor:filledColor forState:PinCodeControlStateFilled | UIControlStateHighlighted];
+//    [self setFillColor:filledColor forState:PinCodeControlStateFilled];
+//    [self setBorderColor:filledColor forState:PinCodeControlStateFilled];
+//    [self setFillColor:filledColor forState:PinCodeControlStateFilled | UIControlStateHighlighted];
+//    [self setBorderColor:filledColor forState:PinCodeControlStateFilled | UIControlStateHighlighted];
+//    [self setFillColor:filledColor forIntersectedState:PinCodeControlStateFilled];
+//    [self setBorderColor:filledColor forIntersectedState:PinCodeControlStateFilled];
+    [self setFillColor:filledColor forInvertedState:PinCodeControlStateInvalid];
+    [self setBorderColor:filledColor forInvertedState:PinCodeControlStateInvalid];
+    [self setFillColor:nil forInvertedState:PinCodeControlStateFilled];
+    [self setBorderColor:nil forInvertedState:PinCodeControlStateFilled];
     [self setFillColor:invalidColor forIntersectedState:PinCodeControlStateInvalid | PinCodeControlStateFilled];
     [self setBorderColor:invalidColor forIntersectedState:PinCodeControlStateInvalid | PinCodeControlStateFilled];
     [self applyCurrentState];
@@ -195,6 +201,18 @@
 }
 
 #pragma mark - UIControl
+
+-(void)setBorderWidth:(CGFloat)borderWidth forInvertedState:(UIControlState)state {
+    [self setValue:@(borderWidth) forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, lineWidth) forInvertedState:state];
+}
+
+-(void)setBorderColor:(UIColor*)borderColor forInvertedState:(UIControlState)state {
+    [self setValue:(id)borderColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, strokeColor) forInvertedState:state];
+}
+
+-(void)setFillColor:(UIColor*)fillColor forInvertedState:(UIControlState)state {
+    [self setValue:(id)fillColor.CGColor forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, fillColor) forInvertedState:state];
+}
 
 -(void)setBorderWidth:(CGFloat)borderWidth forIntersectedState:(UIControlState)state {
     [self setValue:@(borderWidth) forTarget:self.applier forKeyPath:keyPath(CAShapeLayer, lineWidth) forAllStatesContained:state];

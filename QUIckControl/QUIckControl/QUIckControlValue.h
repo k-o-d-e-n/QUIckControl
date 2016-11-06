@@ -7,14 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QUICStateDescriptorKey.h"
+
+@class QUICStateDescriptorKey;
 
 @interface QUIckControlValue : NSObject
 
 -(instancetype)initWithKey:(NSString*)key;
-
 -(void)setValue:(id)value forInvertedState:(UIControlState)state;
 -(void)setValue:(id)value forState:(UIControlState)state;
 -(void)setValue:(id)value forIntersectedState:(UIControlState)state;
+
+-(void)setValue:(id)value forStateDescriptor:(QUICStateDescriptor)descriptor;
 -(id)valueForState:(UIControlState)state;
 
 @end

@@ -8,8 +8,6 @@
 
 #import "QUIckControlValue.h"
 
-static NSString * const QUIckControlIntersectedKey = @"intersected";
-
 @interface QUIckControlValue ()
 @property (nonatomic, strong) NSString * key;
 @property (nonatomic, strong) NSMutableDictionary * values;
@@ -33,6 +31,21 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     return self;
 }
 
+// TODO: state descriptor not used on full power, need remake select value.
+-(void)setValue:(id)value forStateDescriptor:(QUICStateDescriptor)descriptor {
+    switch (descriptor.type) {
+        case QUICStateTypeUsual:
+            [self setValue:value forState:descriptor.state];
+            break;
+        case QUICStateTypeInverted:
+            [self setValue:value forInvertedState:descriptor.state];
+            break;
+        case QUICStateTypeIntersected:
+            [self setValue:value forIntersectedState:descriptor.state];
+            break;
+    }
+}
+
 -(void)setValue:(id)value forInvertedState:(UIControlState)state {
     [self.invertedStates addIndex:state];
     value ? [self.values setObject:value forKey:@(~state)] : [self.values removeObjectForKey:@(~state)];
@@ -52,7 +65,7 @@ static NSString * const QUIckControlIntersectedKey = @"intersected";
     
     if (!value) {
         NSUInteger invertedState = [self.invertedStates indexPassingTest:^BOOL(NSUInteger invertedState, BOOL * _Nonnull stop) {
-            if ((state & invertedState) == 0) {
+            if ((state & invertedState) != invertedState) { // now not inverted, need rename
                 *stop = YES;
                 return YES;
             }
