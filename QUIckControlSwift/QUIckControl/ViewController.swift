@@ -9,7 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var pinControl: PinCodeControl!
     private weak var quickControl: QUIckControl!
+    var stringReceiver: String = "" { didSet { print("Received string: " + stringReceiver) } }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,7 @@ class ViewController: UIViewController {
         quickControl.setValue(UIColor.black as Any, forKeyPath: #keyPath(UIView.backgroundColor), for: .highlighted)
         
         let button = UIButton(frame: CGRect(x: 100, y: 0, width: 100, height: 100))
+        button.backgroundColor = .gray
         view.addSubview(button)
         button.addTarget(self, action: #selector(touchUpInside(sender:)), for: .touchUpInside)
         
@@ -34,6 +37,11 @@ class ViewController: UIViewController {
         pincodeControl.addAction(for: .touchUpInside) { control in
             print(control)
         }.start()
+        
+        pinControl.setValue("QuickControl sended this string",
+                                forTarget: self,
+                                forKeyPath: #keyPath(ViewController.stringReceiver),
+                                for: QUICState(priority: 1001, function: { $0.contains(.invalid) || $0 == .highlighted }))
     }
     
     func touchUpInside(sender: UIButton) {

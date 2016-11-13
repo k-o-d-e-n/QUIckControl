@@ -21,7 +21,7 @@ class QUIckControlValueTarget {
         self.target = target
     }
     
-    func setValue(_ value: Any?, forKeyPath key: String, for descriptor: QUICStateDescriptor) {
+    func setValue(_ value: Any?, forKeyPath key: String, for descriptor: QUICState) {
         keyValue(forKey: key, registerIfNeeded: value != nil).setValue(value, for: descriptor)
     }
     

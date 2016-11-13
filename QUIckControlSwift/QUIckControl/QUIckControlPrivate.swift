@@ -16,7 +16,7 @@ private extension Bool {
 
 struct QUIckControlState {
     let property: String
-    let controlState: UIControlState // use raw value instead
+    let controlState: UIControlState
     let inverted: Bool
     
     func evaluate(_ object: NSObject) -> Bool {

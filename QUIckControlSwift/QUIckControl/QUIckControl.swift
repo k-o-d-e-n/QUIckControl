@@ -106,23 +106,22 @@ open class QUIckControl : UIControl {
     }
     
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forInvertedState state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(state: state, type: .inverted))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .inverted))
     }
     
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forAllStatesContained state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(state: state, type: .intersected))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .intersected))
     }
     
     func setValue(_ value: Any?, forKeyPath key: String, for state: UIControlState) {
         setValue(value, forTarget: self, forKeyPath: key, for: state)
     }
     
-    // TODO: Create possible add values for multiple states
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(state: state, type: .usual))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .usual))
     }
     
-    func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for descriptor: QUICStateDescriptor) {
+    func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for descriptor: QUICState) {
         let valTarget = valueTarget(forTarget: target)
         valTarget.setValue(value, forKeyPath: key, for: descriptor)
         if descriptor.evaluate(state) {
@@ -153,9 +152,8 @@ open class QUIckControl : UIControl {
     }
     
     func apply(_ state: UIControlState) {
-        if isTransitionTime {
-            return
-        }
+        if isTransitionTime { return }
+        
         setNeedsDisplay()
         setNeedsLayout()
         thisValueTarget.applyValues(for: state)
