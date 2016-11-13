@@ -294,7 +294,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     func defaultValidation(_ pin: String) -> Bool {
         let result = pin.characters.reduce((true, true, true, 0)) { (result, character) -> (Bool, Bool, Bool, Int) in
-            if pin.characters.last == character { return result }
+            if result.3 == pin.characters.count - 1 { return result }
             
             let number: Int = Int(String(character))!
             let next: Int = Int(String(pin[pin.index(pin.startIndex, offsetBy: result.3 + 1)]))!
