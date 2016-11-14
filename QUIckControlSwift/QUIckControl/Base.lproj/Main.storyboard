@@ -18,31 +18,116 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qv7-Sg-l6B" customClass="PinCodeControl" customModule="QUIckControl" customModuleProvider="target">
-                                <frame key="frameInset" minX="67" minY="196" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Old pin-code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uhy-bV-q5H" userLabel="Old Pin Label">
+                                <fontDescription key="fontDescription" name="KohinoorBangla-Regular" family="Kohinoor Bangla" pointSize="16"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oxj-YU-Te8" customClass="PinCodeControl" customModule="QUIckControl" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="2nw-vt-ycZ"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="149" id="iN4-kN-ZX6"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="33" id="lun-Ox-8P7"/>
+                                    <constraint firstAttribute="width" constant="149" id="qtX-wK-zMS"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="spaceBetweenItems">
+                                        <real key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="sideSize">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="codeLength">
                                         <integer key="value" value="4"/>
                                     </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New pin-code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhr-OM-cCY" userLabel="New Pin Label">
+                                <fontDescription key="fontDescription" name="KohinoorBangla-Regular" family="Kohinoor Bangla" pointSize="16"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2oB-eZ-vHw" customClass="PinCodeControl" customModule="QUIckControl" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="149" id="kEi-u5-M6g"/>
+                                    <constraint firstAttribute="height" constant="33" id="lGM-B2-t6M"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="spaceBetweenItems">
-                                        <real key="value" value="20"/>
+                                        <real key="value" value="13"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="sideSize">
-                                        <real key="value" value="35"/>
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="codeLength">
+                                        <integer key="value" value="4"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeat pin-code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5X-Hq-U3n" userLabel="Confirm Pin Label">
+                                <fontDescription key="fontDescription" name="KohinoorBangla-Regular" family="Kohinoor Bangla" pointSize="16"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f1S-q1-fau" customClass="PinCodeControl" customModule="QUIckControl" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="149" id="U9L-r4-3l8"/>
+                                    <constraint firstAttribute="height" constant="33" id="XyL-EG-IKs"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="spaceBetweenItems">
+                                        <real key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="sideSize">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="codeLength">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oxb-uJ-yep">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.19711325354609929" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="kQa-JQ-dAG"/>
+                                    <constraint firstAttribute="width" constant="96" id="wBp-hl-6KI"/>
+                                </constraints>
+                                <state key="normal" title="Apply">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="f1S-q1-fau" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3Pi-QF-L6C"/>
+                            <constraint firstItem="Oxj-YU-Te8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6fZ-zN-wkC"/>
+                            <constraint firstItem="Oxb-uJ-yep" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="82a-er-Q7H"/>
+                            <constraint firstItem="2oB-eZ-vHw" firstAttribute="top" secondItem="Uhy-bV-q5H" secondAttribute="bottom" constant="10" id="AqE-yV-idS"/>
+                            <constraint firstItem="Oxb-uJ-yep" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BYj-dA-2fg"/>
+                            <constraint firstItem="Q5X-Hq-U3n" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GwG-Cz-jzP"/>
+                            <constraint firstItem="f1S-q1-fau" firstAttribute="top" secondItem="rhr-OM-cCY" secondAttribute="bottom" constant="10" id="H33-Wo-4Mr"/>
+                            <constraint firstItem="Oxj-YU-Te8" firstAttribute="top" secondItem="Q5X-Hq-U3n" secondAttribute="bottom" constant="10" id="HO4-ry-KC8"/>
+                            <constraint firstItem="rhr-OM-cCY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IkK-45-XWt"/>
+                            <constraint firstItem="rhr-OM-cCY" firstAttribute="top" secondItem="2oB-eZ-vHw" secondAttribute="bottom" constant="20" id="NDf-A1-GOB"/>
+                            <constraint firstItem="2oB-eZ-vHw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d3e-vh-aL0"/>
+                            <constraint firstItem="Uhy-bV-q5H" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fAC-zL-SfB"/>
+                            <constraint firstItem="Q5X-Hq-U3n" firstAttribute="top" secondItem="f1S-q1-fau" secondAttribute="bottom" constant="20" id="oLm-ug-2Yo"/>
+                            <constraint firstItem="Uhy-bV-q5H" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="50" id="snA-FA-647"/>
+                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="pinControl" destination="Qv7-Sg-l6B" id="rms-DD-tDL"/>
+                        <outlet property="applyButton" destination="Oxb-uJ-yep" id="MZG-lV-dPm"/>
+                        <outlet property="newPinCodeControl" destination="f1S-q1-fau" id="LLL-OH-snE"/>
+                        <outlet property="newPinCodeLabel" destination="rhr-OM-cCY" id="4MF-GP-ohK"/>
+                        <outlet property="oldPinCodeControl" destination="2oB-eZ-vHw" id="nVW-8h-lZI"/>
+                        <outlet property="oldPinCodeLabel" destination="Uhy-bV-q5H" id="Lsh-xX-qLr"/>
+                        <outlet property="repeatPinCodeControl" destination="Oxj-YU-Te8" id="vpl-Jv-ZE3"/>
+                        <outlet property="repeatPinCodeLabel" destination="Q5X-Hq-U3n" id="kSA-QG-vKj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>

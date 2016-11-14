@@ -8,45 +8,84 @@
 
 import UIKit
 
+extension UIControlState {
+    static let valid = UIControlState(rawValue: 1 << 18)
+}
+
+struct PinCodeElementsGroup {
+    weak var control: PinCodeControl!
+    weak var label: UILabel!
+    
+    init(control: PinCodeControl, label: UILabel) {
+        self.control = control
+        self.label = label
+        
+        self.control.register(.valid, forBoolKeyPath: #keyPath(PinCodeControl.valid), inverted: false)
+    }
+    
+    private func addEnabledDependencyFor(target: NSObject, enabledValue: Any?, disabledValue: Any?, keyPath: String) {
+        self.control.setValue(enabledValue, forTarget: target, forKeyPath: keyPath, forAllStatesContained: [.filled, .valid])
+        self.control.setValue(disabledValue, forTarget: target, forKeyPath: keyPath, forInvertedState: [.filled, .valid])
+    }
+    
+    func addDependencyFor(group: PinCodeElementsGroup) {
+        addEnabledDependencyFor(target: group.control, enabledValue: true, disabledValue: false, keyPath: #keyPath(UIControl.enabled))
+        addEnabledDependencyFor(target: group.label, enabledValue: UIColor.gray, disabledValue: UIColor.lightGray.withAlphaComponent(0.5), keyPath: #keyPath(UILabel.textColor))
+    }
+    
+    func addDependencyFor(button: UIButton) {
+        addEnabledDependencyFor(target: button, enabledValue: true, disabledValue: false, keyPath: #keyPath(UIButton.enabled))
+        addEnabledDependencyFor(target: button, enabledValue: UIColor.black.withAlphaComponent(0.6), disabledValue: UIColor.lightGray.withAlphaComponent(0.2), keyPath: #keyPath(UIButton.backgroundColor))
+    }
+}
+
 class ViewController: UIViewController {
-    @IBOutlet weak var pinControl: PinCodeControl!
-    private weak var quickControl: QUIckControl!
-    var stringReceiver: String = "" { didSet { print("Received string: " + stringReceiver) } }
+    var logger: String = "" { didSet { print(logger) } }
+    
+    @IBOutlet weak var oldPinCodeLabel: UILabel!
+    @IBOutlet weak var oldPinCodeControl: PinCodeControl!
+    @IBOutlet weak var newPinCodeLabel: UILabel!
+    @IBOutlet weak var newPinCodeControl: PinCodeControl!
+    @IBOutlet weak var repeatPinCodeLabel: UILabel!
+    @IBOutlet weak var repeatPinCodeControl: PinCodeControl!
+    @IBOutlet weak var applyButton: UIButton!
+    
+    lazy var oldGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.oldPinCodeControl, label: self.oldPinCodeLabel)
+    lazy var newGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.newPinCodeControl, label: self.newPinCodeLabel)
+    lazy var repeatGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.repeatPinCodeControl, label: self.repeatPinCodeLabel)
+    
+    var stateLogger: String = "" { didSet { print("Received string: " + stateLogger) } }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let qControl = QUIckControl(frame: .zero)
-        view.addSubview(qControl)
-        quickControl = qControl
-        quickControl.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        quickControl.setValue(UIColor.black as Any, forKeyPath: #keyPath(UIView.backgroundColor), for: .highlighted)
         
-        let button = UIButton(frame: CGRect(x: 100, y: 0, width: 100, height: 100))
-        button.backgroundColor = .gray
-        view.addSubview(button)
-        button.addTarget(self, action: #selector(touchUpInside(sender:)), for: .touchUpInside)
+        oldGroup.addDependencyFor(group: newGroup)
+        newGroup.addDependencyFor(group: repeatGroup)
+        repeatGroup.addDependencyFor(button: applyButton)
         
-        let pincodeControl = PinCodeControl(codeLength: 4, sideSize: 20, spaceSize: 15)
-        pincodeControl.backgroundColor = UIColor.red
-        view.addSubview(pincodeControl)
-        pincodeControl.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
-        pincodeControl.filledItemColor = UIColor.gray
-        pincodeControl.setBorderColor(UIColor.black, for: .highlighted)
-        pincodeControl.setBorderColor(UIColor.gray, for: .normal)
-        pincodeControl.setFill(UIColor.black, forIntersectedState: .normal)
-        pincodeControl.addAction(for: .touchUpInside) { control in
-            print(control)
-        }.start()
+        applyButton.addTarget(self, action: #selector(touchUpInside(sender:)), for: .touchUpInside)
         
-        pinControl.setValue("QuickControl sended this string",
-                                forTarget: self,
-                                forKeyPath: #keyPath(ViewController.stringReceiver),
-                                for: QUICState(priority: 1001, function: { $0.contains(.invalid) || $0 == .highlighted }))
+        newPinCodeControl.addAction(for: .typeComplete) { print($0) }.start()
+        repeatGroup.control.validationBlock = { (code: String) -> Bool in return code == self.newGroup.control.code }
+
+        oldGroup.control.setValue("Old PIN-code is invalid",
+                                  forTarget: self,
+                                  forKeyPath: #keyPath(ViewController.stateLogger),
+                                  for: QUICState(priority: 1001, function: { $0.contains(.invalid) }))
+        oldGroup.control.setValue("Old PIN-code is valid",
+                                  forTarget: self,
+                                  forKeyPath: #keyPath(ViewController.stateLogger),
+                                  for: QUICState(priority: 1000, function: { $0.contains(.filled) && !$0.contains(.invalid) }))
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(false)
     }
     
     func touchUpInside(sender: UIButton) {
-        quickControl.isHighlighted = true
+        print("PIN-code '" + newGroup.control.code + "' saved")
+        oldGroup.control.clear()
+        newGroup.control.clear()
+        repeatGroup.control.clear()
     }
-
 }
-

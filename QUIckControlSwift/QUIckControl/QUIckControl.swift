@@ -121,8 +121,8 @@ open class QUIckControl : UIControl {
         setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .usual))
     }
     
-    func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for descriptor: QUICState) {
-        let valTarget = valueTarget(forTarget: target)
+    func setValue(_ value: Any?, forTarget target: NSObject? = nil, forKeyPath key: String, for descriptor: QUICState) {
+        let valTarget = valueTarget(forTarget: target ?? self)
         valTarget.setValue(value, forKeyPath: key, for: descriptor)
         if descriptor.evaluate(state) {
             valTarget.applyValue(value, forKey: key)

@@ -51,7 +51,7 @@ class QUIckControlValueTarget {
     }
     
     func applyValue(_ value: Any, forKey key: String) {
-        target.setValue(value, forKeyPath: key)
+        target.setValue(instancetype(object: value), forKeyPath: key)
     }
     
     // intersected states not corrected working if two intersected states mathed in current state and contained values for same key.	

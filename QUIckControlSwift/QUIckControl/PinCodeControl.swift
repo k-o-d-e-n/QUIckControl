@@ -44,6 +44,7 @@ class ValueApplier: NSObject {
     }
 }
 
+@IBDesignable
 open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     // current code string
     open var code: String { return text }
@@ -82,7 +83,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     // bezier path for code item
     open var itemPath: UIBezierPath?
     
-    lazy var applier: ValueApplier = ValueApplier(control: self)
+    private lazy var applier: ValueApplier = ValueApplier(control: self)
     private var text = String()
     fileprivate var sublayers: [CAShapeLayer] { return (layer.sublayers as? [CAShapeLayer]) ?? [] }
     private var defaultPath: UIBezierPath!
@@ -126,14 +127,16 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     func loadDefaults() {
         filledItemColor = UIColor.gray
-        let filledColor = UIColor(red: 76.0 / 255.0, green: 145.0 / 255.0, blue: 65.0 / 255.0, alpha: 1)
+        let filledColor = UIColor(red: 76.0 / 255.0, green: 145.0 / 255.0, blue: 65.0 / 255.0, alpha: 1).withAlphaComponent(0.7)
         let invalidColor = UIColor(red: 250.0 / 255.0, green: 88.0 / 255.0, blue: 87.0 / 255.0, alpha: 1)
-        setBorderColor(UIColor.lightGray, for: .normal)
-        setBorderColor(UIColor.white, for: .highlighted)
+        
+        setBorderColor(UIColor.black.withAlphaComponent(0.3), forIntersectedState: .disabled)
+        setFill(filledItemColor!.withAlphaComponent(0.5), forIntersectedState: .disabled)
+        setBorderColor(UIColor.lightGray.withAlphaComponent(0.5), forIntersectedState: .highlighted)
         setFill(filledColor, forInvertedState: .invalid)
         setBorderColor(filledColor, forInvertedState: .invalid)
         setFill(nil, forInvertedState: .filled)
-        setBorderColor(nil, forInvertedState: .filled)
+        setBorderColor(UIColor.gray, forInvertedState: .filled)
         setFill(invalidColor, forIntersectedState: [.invalid, .filled])
         setBorderColor(invalidColor, forIntersectedState: [.invalid, .filled])
         applyCurrentState()

@@ -23,8 +23,8 @@ protocol QUICStateDescriptor: Hashable {
 
 enum QUICStateType : Int16 {
     case usual
-    case inverted
     case intersected
+    case inverted
     case custom
 }
 
@@ -64,14 +64,14 @@ struct QUICState: QUICStateDescriptor {
     }
     
     static public func ==(lhs: QUICState, rhs: QUICState) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.state == rhs.state && lhs.priority == rhs.priority
     }
     
     private static func priorityFor(stateType type: QUICStateType) -> Int {
         switch type {
         case .usual: return 1000
-        case .inverted: return 999
-        case .intersected: return 750
+        case .intersected: return 999
+        case .inverted: return 750
         default: return 250
         }
     }
