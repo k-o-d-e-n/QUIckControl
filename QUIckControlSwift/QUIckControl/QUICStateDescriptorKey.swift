@@ -25,6 +25,8 @@ enum QUICStateType : Int16 {
     case usual
     case intersected
     case inverted
+    case oneOfSeveral
+    case noneOfThis
     case custom
 }
 
@@ -54,6 +56,10 @@ struct QUICState: QUICStateDescriptor {
             evaluateFunction = { $0 != .normal && (state.rawValue & $0.rawValue) != state.rawValue }
         case .intersected:
             evaluateFunction = { (state.rawValue & $0.rawValue) == state.rawValue }
+        case .oneOfSeveral:
+            evaluateFunction = { (state.rawValue & $0.rawValue) != 0 }
+        case .noneOfThis:
+            evaluateFunction = { (state.rawValue & $0.rawValue) == 0 }
         case .custom:
             evaluateFunction = function ?? { _ in return true }
         }
@@ -72,6 +78,7 @@ struct QUICState: QUICStateDescriptor {
         case .usual: return 1000
         case .intersected: return 999
         case .inverted: return 750
+        case .oneOfSeveral, .noneOfThis: return 500
         default: return 250
         }
     }

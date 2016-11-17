@@ -219,8 +219,14 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     override open var canBecomeFirstResponder: Bool { return true }
     
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        performTransition(withCommit: false) {
+            super.touchesBegan(touches, with: event)
+        }
+    }
+    
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        performTransition { _ in
+        performTransition {
             super.touchesEnded(touches, with: event)
             _ = self.becomeFirstResponder()
         }

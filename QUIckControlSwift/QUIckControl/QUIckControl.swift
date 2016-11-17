@@ -57,6 +57,11 @@ open class QUIckControl : UIControl {
         isTransitionTime = true
     }
     
+    func endTransition() {
+        isTransitionTime = false
+        scheduledActions.removeAllObjects()
+    }
+    
     func commitTransition() {
         if !isTransitionTime { return }
         
@@ -68,10 +73,10 @@ open class QUIckControl : UIControl {
         scheduledActions.removeAllObjects()
     }
     
-    func performTransition(_ transition: @escaping () -> Void) {
+    func performTransition(withCommit commit: Bool = true, transition: () -> Void) {
         beginTransition()
         transition()
-        commitTransition()
+        commit ? commitTransition() : endTransition()
     }
     
     func register(_ state: UIControlState, forBoolKeyPath keyPath: String, inverted: Bool) {
@@ -81,7 +86,7 @@ open class QUIckControl : UIControl {
     
     // MARK: - Actions
     
-    func addAction(for events: UIControlEvents, _ action: @escaping (QUIckControl) -> Void) -> QUIckControlActionTarget {
+    func subscribe(on events: UIControlEvents, _ action: @escaping (QUIckControl) -> Void) -> QUIckControlActionTarget {
         let actionTarget = QUIckControlActionTargetImp(control: self, controlEvents: events)
         actionTarget.action = action
         actionTargets.append(actionTarget)
@@ -151,7 +156,7 @@ open class QUIckControl : UIControl {
         valueTarget(forTarget: target).applyValues(for: state)
     }
     
-    func apply(_ state: UIControlState) {
+    private func apply(_ state: UIControlState) {
         if isTransitionTime { return }
         
         setNeedsDisplay()

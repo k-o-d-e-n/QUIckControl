@@ -55,6 +55,7 @@ class ViewController: UIViewController {
     lazy var repeatGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.repeatPinCodeControl, label: self.repeatPinCodeLabel)
     
     var stateLogger: String = "" { didSet { print("Received string: " + stateLogger) } }
+    var stateIsEnabled: Bool = false { didSet { print("State is " + String(stateIsEnabled)) } }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +66,17 @@ class ViewController: UIViewController {
         
         applyButton.addTarget(self, action: #selector(touchUpInside(sender:)), for: .touchUpInside)
         
-        newPinCodeControl.addAction(for: .typeComplete) { print($0) }.start()
+        newPinCodeControl.subscribe(on: .typeComplete) { print($0) }.start()
         repeatGroup.control.validationBlock = { (code: String) -> Bool in return code == self.newGroup.control.code }
+        
+//        oldGroup.control.setValue(true,
+//                                  forTarget: self,
+//                                  forKeyPath: #keyPath(ViewController.stateIsEnabled),
+//                                  for: QUICState(state: [.highlighted, .invalid], type: .oneOfSeveral))
+//        repeatGroup.control.setValue(UIColor.red.withAlphaComponent(0.1),
+//                                     forTarget: self.view,
+//                                     forKeyPath: #keyPath(UIView.backgroundColor),
+//                                     for: QUICState(state: [.filled], type: .noneOfThis))
 
         oldGroup.control.setValue("Old PIN-code is invalid",
                                   forTarget: self,

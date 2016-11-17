@@ -100,8 +100,8 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="f1S-q1-fau" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3Pi-QF-L6C"/>
+                            <constraint firstItem="Oxb-uJ-yep" firstAttribute="top" secondItem="Oxj-YU-Te8" secondAttribute="bottom" constant="32" id="4AP-IQ-pGP"/>
                             <constraint firstItem="Oxj-YU-Te8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6fZ-zN-wkC"/>
-                            <constraint firstItem="Oxb-uJ-yep" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="82a-er-Q7H"/>
                             <constraint firstItem="2oB-eZ-vHw" firstAttribute="top" secondItem="Uhy-bV-q5H" secondAttribute="bottom" constant="10" id="AqE-yV-idS"/>
                             <constraint firstItem="Oxb-uJ-yep" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BYj-dA-2fg"/>
                             <constraint firstItem="Q5X-Hq-U3n" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GwG-Cz-jzP"/>
