@@ -2,14 +2,16 @@
 Base class for quick implementation UIControl subclass based on standard(enabled, highlighted, selected) and custom states.
 Implementation based on KVC.
 
-You may to bind value for specific target with:
+You may to bind value for specific target with state of types:
  - simple state as bitmask (UIControlState);
- - state, which contained in current state (intersected state);
- - all states, which not matched specified state (inverted state);
- - custom state, which you implemented;
+ - state, which contains in current state (.intersected);
+ - all states, which not matched specified state (.inverted);
+ - all states, where current state contains one or more specified substates (.oneOfSeveral);
+ - all states, where current state not contains specified substates (.noneOfThis);
+ - custom state, which you implemented (.custom);
  
 All state types have priority and value setup from most high priority state.
-In default implementation simple state have priority 1000, intersected 999, inverted 750, custom not defined.
+In default implementation simple state have priority 1000, intersected 999, inverted 750, oneOfSeveral and noneOfThis 500, custom user defined.
 
 Example usage:
 
