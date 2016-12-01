@@ -22,7 +22,7 @@ class QUIckControlActionTargetImp: NSObject, QUIckControlActionTarget {
     }
     
     func actionSelector(_ control: QUIckControl) {
-            action?(parentControl)
+        action?(parentControl)
     }
     
     func start() {

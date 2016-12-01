@@ -13,10 +13,11 @@ protocol QUIckControlActionTarget {
     func stop()
 }
 
-open class QUIckControl : UIControl {
+open class QUIckControl : UIControl, Statable {
+    typealias StateUnit = QUIckControlState
     var isTransitionTime = false
     lazy var thisValueTarget: QUIckControlValueTarget = QUIckControlValueTarget(target: self)
-    var states = [QUIckControlState]()
+    var stateUnits = [QUIckControlState]()
     var targets = [QUIckControlValueTarget]()
     let scheduledActions = NSMutableSet()
     var actionTargets = [QUIckControlActionTarget]()
@@ -81,7 +82,7 @@ open class QUIckControl : UIControl {
     
     func register(_ state: UIControlState, forBoolKeyPath keyPath: String, inverted: Bool) {
         // & UIControlStateApplication ?
-        states.append(QUIckControlState(property: keyPath, controlState: state, inverted: inverted))
+        stateUnits.append(QUIckControlState(property: keyPath, state: state, inverted: inverted))
     }
     
     // MARK: - Actions
@@ -102,6 +103,8 @@ open class QUIckControl : UIControl {
     }
     
     // MARK: - Values
+    
+    // TODO: Create method for remove values for keyPath
     
     func removeValues(forTarget target: NSObject) {
         let targetIndex = indexOfTarget(target)
@@ -156,7 +159,7 @@ open class QUIckControl : UIControl {
         valueTarget(forTarget: target).applyValues(for: state)
     }
     
-    private func apply(_ state: UIControlState) {
+    internal func apply(_ state: UIControlState) {
         if isTransitionTime { return }
         
         setNeedsDisplay()
@@ -177,9 +180,9 @@ open class QUIckControl : UIControl {
     
     override open var state: UIControlState {
         var result: UInt = 0
-        for stateValue in states {
+        for stateValue in stateUnits {
             if stateValue.evaluate(self) {
-                result |= stateValue.controlState.rawValue
+                result |= stateValue.state.rawValue
             }
         }
         return UIControlState(rawValue: result)

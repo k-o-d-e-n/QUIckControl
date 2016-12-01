@@ -15,6 +15,7 @@ extension UIControlEvents {
 extension UIControlState {
     public static var filled = UIControlState(rawValue: 1 << 16)
     public static var invalid = UIControlState(rawValue: 1 << 17)
+    public static let valid = UIControlState(rawValue: (1 << 18) | filled.rawValue)
 }
 
 class ValueApplier: NSObject {
@@ -87,6 +88,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     private var text = String()
     fileprivate var sublayers: [CAShapeLayer] { return (layer.sublayers as? [CAShapeLayer]) ?? [] }
     private var defaultPath: UIBezierPath!
+    @objc private var codeIsValid: Bool { return filled && valid }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -112,6 +114,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     func initializeInstance() {
         register(.filled, forBoolKeyPath: #keyPath(PinCodeControl.filled), inverted: false)
         register(.invalid, forBoolKeyPath: #keyPath(PinCodeControl.valid), inverted: true)
+        register(.valid, forBoolKeyPath: #keyPath(PinCodeControl.codeIsValid), inverted: false)
     }
     
     override open func awakeFromNib() {
@@ -130,15 +133,11 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         let filledColor = UIColor(red: 76.0 / 255.0, green: 145.0 / 255.0, blue: 65.0 / 255.0, alpha: 1).withAlphaComponent(0.7)
         let invalidColor = UIColor(red: 250.0 / 255.0, green: 88.0 / 255.0, blue: 87.0 / 255.0, alpha: 1)
         
-        setBorderColor(UIColor.black.withAlphaComponent(0.3), forIntersectedState: .disabled)
-        setFill(filledItemColor!.withAlphaComponent(0.5), forIntersectedState: .disabled)
-        setBorderColor(UIColor.lightGray.withAlphaComponent(0.5), forIntersectedState: .highlighted)
-        setFill(filledColor, forInvertedState: .invalid)
-        setBorderColor(filledColor, forInvertedState: .invalid)
-        setFill(nil, forInvertedState: .filled)
-        setBorderColor(UIColor.gray, forInvertedState: .filled)
-        setFill(invalidColor, forIntersectedState: [.invalid, .filled])
-        setBorderColor(invalidColor, forIntersectedState: [.invalid, .filled])
+        setForDisabledState(filledItemColor!.withAlphaComponent(0.5), borderColor: UIColor.black.withAlphaComponent(0.3), borderWidth: nil)
+        setForPlainState(nil, borderColor: UIColor.gray, borderWidth: 1)
+        setValue(UIColor.lightGray.withAlphaComponent(0.5).cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .highlighted)
+        setForValidState(filledColor, borderColor: filledColor, borderWidth: nil)
+        setForInvalidState(invalidColor, borderColor: invalidColor, borderWidth: nil)
         applyCurrentState()
     }
     
@@ -179,40 +178,28 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     // MARK: - QUIckControl
     
-    func setBorderWidth(_ borderWidth: CGFloat, forInvertedState state: UIControlState) {
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forInvertedState: state)
+    func setForValidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: .valid)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .valid)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: .valid)
     }
     
-    func setBorderColor(_ borderColor: UIColor?, forInvertedState state: UIControlState) {
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forInvertedState: state)
+    func setForInvalidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: [.filled, .invalid])
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: [.filled, .invalid])
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: [.filled, .invalid])
     }
     
-    func setFill(_ fillColor: UIColor?, forInvertedState state: UIControlState) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forInvertedState: state)
+    func setForPlainState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forInvertedState: .filled)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forInvertedState: .filled)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forInvertedState: .filled)
     }
     
-    func setBorderWidth(_ borderWidth: CGFloat, forIntersectedState state: UIControlState) {
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: state)
-    }
-    
-    func setBorderColor(_ borderColor: UIColor?, forIntersectedState state: UIControlState) {
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: state)
-    }
-    
-    func setFill(_ fillColor: UIColor?, forIntersectedState state: UIControlState) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: state)
-    }
-    
-    func setBorderWidth(_ borderWidth: CGFloat, for state: UIControlState) {
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: state)
-    }
-    
-    func setBorderColor(_ borderColor: UIColor?, for state: UIControlState) {
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: state)
-    }
-    
-    func setFill(_ fillColor: UIColor?, for state: UIControlState) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: state)
+    func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
     }
     
     // MARK: - UIResponder

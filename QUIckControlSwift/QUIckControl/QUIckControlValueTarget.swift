@@ -8,8 +8,8 @@
 
 import UIKit
 
-public func instancetype<T>(object: Any) -> T {
-    return object as! T
+public func instancetype<T>(object: Any?) -> T? {
+    return object as? T
 }
 
 class QUIckControlValueTarget {
@@ -22,12 +22,12 @@ class QUIckControlValueTarget {
     }
     
     func setValue(_ value: Any?, forKeyPath key: String, for descriptor: QUICState) {
-        keyValue(forKey: key, registerIfNeeded: value != nil).setValue(value, for: descriptor)
+        keyValue(forKey: key).setValue(value, for: descriptor)
     }
     
-    private func keyValue(forKey key: String, registerIfNeeded needed: Bool) -> QUIckControlValue {
+    private func keyValue(forKey key: String) -> QUIckControlValue {
         var keyValue = values[key]
-        if (keyValue == nil) && needed {
+        if (keyValue == nil) {
             keyValue = registerKey(key)
         }
         return keyValue!
@@ -50,7 +50,7 @@ class QUIckControlValueTarget {
         }
     }
     
-    func applyValue(_ value: Any, forKey key: String) {
+    func applyValue(_ value: Any?, forKey key: String) {
         target.setValue(instancetype(object: value), forKeyPath: key)
     }
     

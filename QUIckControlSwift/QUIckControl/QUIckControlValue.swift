@@ -16,7 +16,7 @@ class QUIckControlValue {
         self.key = key
     }
     
-    func setValue(_ value: Any, for descriptor: QUICState) {
+    func setValue(_ value: Any?, for descriptor: QUICState) {
         values[descriptor] = value
     }
     

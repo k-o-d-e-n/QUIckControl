@@ -34,39 +34,39 @@ struct QUICState: QUICStateDescriptor {
     let priority: Int
     let state: UIControlState
     let type: QUICStateType
-    private let evaluateFunction: (_ state: UIControlState) -> Bool
+    private let predicate: (_ state: UIControlState) -> Bool
     var hashValue: Int { return Int(state.rawValue) * priority }
     
-    init(priority: Int, function: @escaping (_ state: UIControlState) -> Bool) {
-        self.init(state: .normal, type: .custom, priority: priority, function: function)
+    init(priority: Int, predicate: @escaping (_ state: UIControlState) -> Bool) {
+        self.init(state: .normal, type: .custom, priority: priority, predicate: predicate)
     }
     
     init(state: UIControlState, type: QUICStateType) {
-        self.init(state: state, type: type, priority: QUICState.priorityFor(stateType: type), function: nil)
+        self.init(state: state, type: type, priority: QUICState.priorityFor(stateType: type), predicate: nil)
     }
     
-    private init(state: UIControlState, type: QUICStateType, priority: Int, function: ((_ state: UIControlState) -> Bool)?) {
+    private init(state: UIControlState, type: QUICStateType, priority: Int, predicate: ((_ state: UIControlState) -> Bool)?) {
         self.priority = priority
         self.state = state
         self.type = type
         switch (type) {
         case .usual:
-            evaluateFunction = { state == $0 }
+            self.predicate = { state == $0 }
         case .inverted:
-            evaluateFunction = { $0 != .normal && (state.rawValue & $0.rawValue) != state.rawValue }
+            self.predicate = { (state.rawValue & $0.rawValue) != state.rawValue }
         case .intersected:
-            evaluateFunction = { (state.rawValue & $0.rawValue) == state.rawValue }
+            self.predicate = { (state.rawValue & $0.rawValue) == state.rawValue }
         case .oneOfSeveral:
-            evaluateFunction = { (state.rawValue & $0.rawValue) != 0 }
+            self.predicate = { (state.rawValue & $0.rawValue) != 0 }
         case .noneOfThis:
-            evaluateFunction = { (state.rawValue & $0.rawValue) == 0 }
+            self.predicate = { (state.rawValue & $0.rawValue) == 0 }
         case .custom:
-            evaluateFunction = function ?? { _ in return true }
+            self.predicate = predicate ?? { _ in return true }
         }
     }
     
     func evaluate(_ controlState: UIControlState) -> Bool {
-        return evaluateFunction(controlState)
+        return predicate(controlState)
     }
     
     static public func ==(lhs: QUICState, rhs: QUICState) -> Bool {

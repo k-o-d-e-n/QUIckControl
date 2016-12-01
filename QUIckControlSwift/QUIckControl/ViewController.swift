@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIControlState {
-    static let valid = UIControlState(rawValue: 1 << 18)
 }
 
 struct PinCodeElementsGroup {
@@ -19,13 +18,11 @@ struct PinCodeElementsGroup {
     init(control: PinCodeControl, label: UILabel) {
         self.control = control
         self.label = label
-        
-        self.control.register(.valid, forBoolKeyPath: #keyPath(PinCodeControl.valid), inverted: false)
     }
     
     private func addEnabledDependencyFor(target: NSObject, enabledValue: Any?, disabledValue: Any?, keyPath: String) {
-        self.control.setValue(enabledValue, forTarget: target, forKeyPath: keyPath, forAllStatesContained: [.filled, .valid])
-        self.control.setValue(disabledValue, forTarget: target, forKeyPath: keyPath, forInvertedState: [.filled, .valid])
+        self.control.setValue(enabledValue, forTarget: target, forKeyPath: keyPath, forAllStatesContained: [.valid])
+        self.control.setValue(disabledValue, forTarget: target, forKeyPath: keyPath, forInvertedState: [.valid])
     }
     
     func addDependencyFor(group: PinCodeElementsGroup) {
@@ -56,6 +53,7 @@ class ViewController: UIViewController {
     
     var stateLogger: String = "" { didSet { print("Received string: " + stateLogger) } }
     var stateIsEnabled: Bool = false { didSet { print("State is " + String(stateIsEnabled)) } }
+    var printFunction: () -> () = { print("default state") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,15 +75,20 @@ class ViewController: UIViewController {
 //                                     forTarget: self.view,
 //                                     forKeyPath: #keyPath(UIView.backgroundColor),
 //                                     for: QUICState(state: [.filled], type: .noneOfThis))
+//        let newPrint: () -> () = { _ in
+//            print("test")
+//        }
+//        self.setValue(newPrint as Any?, forKey: "printFunction")
+//        oldGroup.control.setValue({ print("filled state") }, forTarget: self, forKeyPath: #keyPath(ViewController.printFunction), forAllStatesContained: .filled)
 
         oldGroup.control.setValue("Old PIN-code is invalid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICState(priority: 1001, function: { $0.contains(.invalid) }))
+                                  for: QUICState(priority: 1001, predicate: { $0.contains(.invalid) }))
         oldGroup.control.setValue("Old PIN-code is valid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICState(priority: 1000, function: { $0.contains(.filled) && !$0.contains(.invalid) }))
+                                  for: QUICState(priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -98,4 +101,8 @@ class ViewController: UIViewController {
         newGroup.control.clear()
         repeatGroup.control.clear()
     }
+}
+
+func newPrint() {
+    print("test")
 }

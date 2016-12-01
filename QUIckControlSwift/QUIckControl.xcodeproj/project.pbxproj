@@ -20,6 +20,7 @@
 		A49A53991DCFC6B700B2E5CD /* QUIckControlValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A53981DCFC6B700B2E5CD /* QUIckControlValue.swift */; };
 		A49A539B1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A539A1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift */; };
 		A49A539D1DCFDED700B2E5CD /* QUIckControlPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A539C1DCFDED700B2E5CD /* QUIckControlPrivate.swift */; };
+		A4E42F7C1DEF7ABE00FE278F /* Statable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E42F7B1DEF7ABE00FE278F /* Statable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		A49A53981DCFC6B700B2E5CD /* QUIckControlValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUIckControlValue.swift; sourceTree = "<group>"; };
 		A49A539A1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUICStateDescriptorKey.swift; sourceTree = "<group>"; };
 		A49A539C1DCFDED700B2E5CD /* QUIckControlPrivate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUIckControlPrivate.swift; sourceTree = "<group>"; };
+		A4E42F7B1DEF7ABE00FE278F /* Statable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		A43E40F41DBD0B660009DBD9 /* QUIckControl */ = {
 			isa = PBXGroup;
 			children = (
+				A4E42F7A1DEF7AA100FE278F /* Statable */,
 				A42957561DD0EE3D000745D6 /* PinCodeControl */,
 				A44FFAE81DBD0FE5006EACA5 /* QUIckControl */,
 				A43E40F51DBD0B660009DBD9 /* AppDelegate.swift */,
@@ -131,6 +134,14 @@
 				A452AB1B1DD1D9FE00D409DE /* QUIckControlActionTargetImp.swift */,
 			);
 			name = QUIckControl;
+			sourceTree = "<group>";
+		};
+		A4E42F7A1DEF7AA100FE278F /* Statable */ = {
+			isa = PBXGroup;
+			children = (
+				A4E42F7B1DEF7ABE00FE278F /* Statable.swift */,
+			);
+			name = Statable;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A49A53971DCFC2F600B2E5CD /* QUIckControlValueTarget.swift in Sources */,
+				A4E42F7C1DEF7ABE00FE278F /* Statable.swift in Sources */,
 				A43E40F81DBD0B660009DBD9 /* ViewController.swift in Sources */,
 				A452AB1C1DD1D9FE00D409DE /* QUIckControlActionTargetImp.swift in Sources */,
 				A42957581DD0EE5B000745D6 /* PinCodeControl.swift in Sources */,

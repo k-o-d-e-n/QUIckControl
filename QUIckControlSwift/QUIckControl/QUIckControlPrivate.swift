@@ -14,13 +14,15 @@ private extension Bool {
     }
 }
 
-struct QUIckControlState {
+struct QUIckControlState: StatePredicate {
+    typealias EvaluatedObject = QUIckControl
     let property: String
-    let controlState: UIControlState
+    let state: UIControlState
     let inverted: Bool
     
-    func evaluate(_ object: NSObject) -> Bool {
+    func evaluate(_ object: QUIckControl) -> Bool {
         let propertyValue = object.value(forKeyPath: property) as! Bool
         return Bool(propertyValue.hashValue ^ inverted.hashValue)
     }
 }
+
