@@ -66,29 +66,17 @@ class ViewController: UIViewController {
         
         newPinCodeControl.subscribe(on: .typeComplete) { print($0) }.start()
         repeatGroup.control.validationBlock = { (code: String) -> Bool in return code == self.newGroup.control.code }
-        
-//        oldGroup.control.setValue(true,
-//                                  forTarget: self,
-//                                  forKeyPath: #keyPath(ViewController.stateIsEnabled),
-//                                  for: QUICState(state: [.highlighted, .invalid], type: .oneOfSeveral))
-//        repeatGroup.control.setValue(UIColor.red.withAlphaComponent(0.1),
-//                                     forTarget: self.view,
-//                                     forKeyPath: #keyPath(UIView.backgroundColor),
-//                                     for: QUICState(state: [.filled], type: .noneOfThis))
-//        let newPrint: () -> () = { _ in
-//            print("test")
-//        }
-//        self.setValue(newPrint as Any?, forKey: "printFunction")
-//        oldGroup.control.setValue({ print("filled state") }, forTarget: self, forKeyPath: #keyPath(ViewController.printFunction), forAllStatesContained: .filled)
 
         oldGroup.control.setValue("Old PIN-code is invalid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICState(priority: 1001, predicate: { $0.contains(.invalid) }))
+                                  for: QUICStateDescriptor(state: .invalid, priority: 1000, predicate: { $0.contains(.invalid) }))
         oldGroup.control.setValue("Old PIN-code is valid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICState(priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
+                                  for: QUICStateDescriptor(state: [.filled, .invalid], priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
+        
+        newGroup.control.subscribe(on: QUICStateDescriptor(usual: .valid), { print("New pin code is valid") })
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -101,8 +89,4 @@ class ViewController: UIViewController {
         newGroup.control.clear()
         repeatGroup.control.clear()
     }
-}
-
-func newPrint() {
-    print("test")
 }

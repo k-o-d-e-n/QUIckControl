@@ -20,7 +20,7 @@ extension NSPredicate: Predicate {
 class BlockPredicate<Evaluated>: Predicate {
     typealias EvaluatedEntity = Evaluated
     
-    let predicate: (_ object: Evaluated) -> Bool
+    internal let predicate: (_ object: Evaluated) -> Bool
     
     init(predicate: @escaping (_ object: Evaluated) -> Bool) {
         self.predicate = predicate

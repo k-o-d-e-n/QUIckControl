@@ -24,7 +24,7 @@ class QUIckControlValueTarget: StatesApplier {
         self.target = target
     }
     
-    func setValue(_ value: Any?, forKeyPath key: String, for descriptor: QUICState) {
+    func setValue(_ value: Any?, forKeyPath key: String, for descriptor: QUICStateDescriptor) {
         keyValue(forKey: key).setValue(value, for: descriptor)
     }
     
@@ -53,7 +53,7 @@ class QUIckControlValueTarget: StatesApplier {
         }
     }
     
-    func applyValues(for state: UIControlState) {
+    func apply(state: UIControlState) {
         apply(state: state, for: target)
     }
     

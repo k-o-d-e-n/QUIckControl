@@ -38,7 +38,7 @@ extension Statable {
      }
  */
 protocol KnownStatable: Statable {
-    var comparedState: StateType { get }
+    var storedState: StateType { get }
 }
 
 // MARK: Predicates
@@ -82,4 +82,18 @@ protocol StatesApplier {
     associatedtype ApplyTarget
     
     func apply(state: StateType, for target: ApplyTarget)
+}
+
+// MARK: Subscribers
+
+protocol StateSubscriber: Predicate {
+    func invoke()
+}
+
+extension StateSubscriber {
+    func invoke(ifMatched entity: EvaluatedEntity) {
+        if evaluate(with: entity) {
+            invoke()
+        }
+    }
 }

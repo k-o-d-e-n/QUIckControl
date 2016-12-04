@@ -31,11 +31,31 @@ class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
     }
     
     func mark(state: inout UIControlState) {
-        state.insert(self.state)
+        state.formUnion(self.state)
     }
 }
 
-// for example
+class QUIckControlSubscriber: StateSubscriber {
+    typealias EvaluatedEntity = UIControlState
+    
+    let action: () -> ()
+    let descriptor: QUICStateDescriptor
+
+    init(for descriptor: QUICStateDescriptor, action: @escaping () -> ()) {
+        self.action = action
+        self.descriptor = descriptor
+    }
+    
+    func invoke() {
+        action()
+    }
+    
+    func evaluate(with entity: UIControlState) -> Bool {
+        return descriptor.evaluate(with: entity)
+    }
+}
+
+// for example using BlockPredicate
 class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateFactor {
     typealias StateType = UIControlState
     
@@ -48,7 +68,7 @@ class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateF
     }
     
     func mark(state: inout UIControlState) {
-        state.insert(self.state)
+        state.formUnion(self.state)
     }
 }
 

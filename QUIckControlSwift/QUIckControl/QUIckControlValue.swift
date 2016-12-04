@@ -10,13 +10,14 @@ import UIKit
 
 class QUIckControlValue {
     let key: String
-    private var values = [QUICState: Any]()
+    private var values = [QUICStateDescriptor: Any]()
     
     init(key: String) {
         self.key = key
     }
     
-    func setValue(_ value: Any?, for descriptor: QUICState) {
+    // TODO: Find decision problem with idle descriptors
+    func setValue(_ value: Any?, for descriptor: QUICStateDescriptor) {
         values[descriptor] = value
     }
     

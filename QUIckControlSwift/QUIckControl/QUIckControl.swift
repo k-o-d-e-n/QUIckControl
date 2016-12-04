@@ -23,7 +23,14 @@ open class QUIckControl : UIControl, KnownStatable {
     var targets = [QUIckControlValueTarget]()
     let scheduledActions = NSMutableSet()
     var actionTargets = [QUIckControlActionTarget]()
-    internal var comparedState: UIControlState = .normal
+    lazy var subscribers: [QUIckControlSubscriber] = [QUIckControlSubscriber]()
+    internal var storedState: UIControlState = .normal {
+        didSet {
+            for subscriber in subscribers {
+                subscriber.invoke(ifMatched: storedState)
+            }
+        }
+    }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -121,6 +128,10 @@ open class QUIckControl : UIControl, KnownStatable {
         super.sendActions(for: controlEvents)
     }
     
+    func subscribe(on state: QUICStateDescriptor, _ action: @escaping () -> ()) {
+        self.subscribers.append(QUIckControlSubscriber(for: state, action: action))
+    }
+    
     // MARK: - Values
     
     func removeValues(forTarget target: NSObject, forKeyPath key: String, forState state: UIControlState) {
@@ -141,11 +152,11 @@ open class QUIckControl : UIControl, KnownStatable {
     }
     
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forInvertedState state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .inverted))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(inverted: state))
     }
     
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forAllStatesContained state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .intersected))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(intersected: state))
     }
     
     func setValue(_ value: Any?, forKeyPath key: String, for state: UIControlState) {
@@ -153,10 +164,10 @@ open class QUIckControl : UIControl, KnownStatable {
     }
     
     func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for state: UIControlState) {
-        setValue(value, forTarget: target, forKeyPath: key, for: QUICState(state: state, type: .usual))
+        setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(usual: state))
     }
     
-    func setValue(_ value: Any?, forTarget target: NSObject? = nil, forKeyPath key: String, for descriptor: QUICState) {
+    func setValue(_ value: Any?, forTarget target: NSObject? = nil, forKeyPath key: String, for descriptor: QUICStateDescriptor) {
         let valTarget = valueTarget(forTarget: target ?? self)
         valTarget.setValue(value, forKeyPath: key, for: descriptor)
         if descriptor.evaluate(with: state) {
@@ -186,23 +197,23 @@ open class QUIckControl : UIControl, KnownStatable {
         guard !isTransitionTime else { return }
         
         let currentState = state
-        guard comparedState != currentState else { return }
+        guard storedState != currentState else { return }
         
         apply(state: currentState)
-        comparedState = currentState
+        storedState = currentState
     }
     
     func applyCurrentState(forTarget target: NSObject) {
-        valueTarget(forTarget: target).applyValues(for: state)
+        valueTarget(forTarget: target).apply(state: state)
     }
     
     // force apply state
     internal func apply(state: UIControlState) {
         setNeedsDisplay()
         setNeedsLayout()
-        thisValueTarget.applyValues(for: state)
+        thisValueTarget.apply(state: state)
         for target: QUIckControlValueTarget in targets {
-            target.applyValues(for: state)
+            target.apply(state: state)
         }
     }
     
@@ -217,6 +228,8 @@ open class QUIckControl : UIControl, KnownStatable {
         }
         return result
     }
+
+    // MARK: Deinitialier
     
     deinit {
         for target in actionTargets {

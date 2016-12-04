@@ -188,33 +188,38 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     // MARK: - QUIckControl
     
     func setForValidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: .valid)
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .valid)
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: .valid)
+        let validDescriptor = QUICStateDescriptor(intersected: .valid)
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: validDescriptor)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: validDescriptor)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: validDescriptor)
     }
     
     func setForInvalidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: [.filled, .invalid])
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: [.filled, .invalid])
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: [.filled, .invalid])
+        let invalidDescriptor = QUICStateDescriptor(intersected: [.filled, .invalid])
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: invalidDescriptor)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: invalidDescriptor)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: invalidDescriptor)
     }
     
     func setForPlainState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forInvertedState: .filled)
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forInvertedState: .filled)
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forInvertedState: .filled)
+        let plainDescriptor = QUICStateDescriptor(inverted: .filled)
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: plainDescriptor)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: plainDescriptor)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: plainDescriptor)
     }
     
     func setForHighlightedState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .highlighted)
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: .highlighted)
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: .highlighted)
+        let highlightedDescriptor = QUICStateDescriptor(intersected: .highlighted)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: highlightedDescriptor)
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: highlightedDescriptor)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: highlightedDescriptor)
     }
     
     func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
-        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
-        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
-        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: QUICState(priority: 1000, predicate: { $0.contains(.disabled) }))
+        let disableDescriptor = QUICStateDescriptor(intersected: .disabled, priority: 1000)
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: disableDescriptor)
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: disableDescriptor)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: disableDescriptor)
     }
     
     // MARK: - UIResponder
