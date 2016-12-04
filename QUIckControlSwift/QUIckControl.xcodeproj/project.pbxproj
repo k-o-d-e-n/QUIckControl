@@ -20,6 +20,7 @@
 		A49A53991DCFC6B700B2E5CD /* QUIckControlValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A53981DCFC6B700B2E5CD /* QUIckControlValue.swift */; };
 		A49A539B1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A539A1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift */; };
 		A49A539D1DCFDED700B2E5CD /* QUIckControlPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49A539C1DCFDED700B2E5CD /* QUIckControlPrivate.swift */; };
+		A4DA7B261DF352F900B1A279 /* StatableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DA7B251DF352F900B1A279 /* StatableSupport.swift */; };
 		A4E42F7C1DEF7ABE00FE278F /* Statable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E42F7B1DEF7ABE00FE278F /* Statable.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		A49A53981DCFC6B700B2E5CD /* QUIckControlValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUIckControlValue.swift; sourceTree = "<group>"; };
 		A49A539A1DCFC86E00B2E5CD /* QUICStateDescriptorKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUICStateDescriptorKey.swift; sourceTree = "<group>"; };
 		A49A539C1DCFDED700B2E5CD /* QUIckControlPrivate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QUIckControlPrivate.swift; sourceTree = "<group>"; };
+		A4DA7B251DF352F900B1A279 /* StatableSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatableSupport.swift; sourceTree = "<group>"; };
 		A4E42F7B1DEF7ABE00FE278F /* Statable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Statable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,6 +141,7 @@
 		A4E42F7A1DEF7AA100FE278F /* Statable */ = {
 			isa = PBXGroup;
 			children = (
+				A4DA7B251DF352F900B1A279 /* StatableSupport.swift */,
 				A4E42F7B1DEF7ABE00FE278F /* Statable.swift */,
 			);
 			name = Statable;
@@ -194,6 +197,7 @@
 				TargetAttributes = {
 					A43E40F11DBD0B660009DBD9 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = B9639RHZFT;
 						LastSwiftMigration = 0800;
 					};
 					A43E41051DBD0B660009DBD9 = {
@@ -257,6 +261,7 @@
 				A43E40F61DBD0B660009DBD9 /* AppDelegate.swift in Sources */,
 				A49A53991DCFC6B700B2E5CD /* QUIckControlValue.swift in Sources */,
 				A49A539D1DCFDED700B2E5CD /* QUIckControlPrivate.swift in Sources */,
+				A4DA7B261DF352F900B1A279 /* StatableSupport.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +398,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = B9639RHZFT;
 				INFOPLIST_FILE = QUIckControl/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControl;
@@ -408,6 +414,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = B9639RHZFT;
 				INFOPLIST_FILE = QUIckControl/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControl;

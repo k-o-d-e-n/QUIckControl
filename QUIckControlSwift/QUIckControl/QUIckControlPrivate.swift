@@ -14,15 +14,54 @@ private extension Bool {
     }
 }
 
-struct QUIckControlState: StatePredicate {
-    typealias EvaluatedObject = QUIckControl
+class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
+    typealias EvaluatedEntity = Control
+    typealias StateType = UIControlState
+    
+    let predicate: NSPredicate
+    let state: UIControlState
+    
+    required init(state: UIControlState, predicate: NSPredicate) {
+        self.state = state
+        self.predicate = predicate
+    }
+    
+    func evaluate(with object: Control) -> Bool {
+        return predicate.evaluate(with: object)
+    }
+    
+    func mark(state: inout UIControlState) {
+        state.insert(self.state)
+    }
+}
+
+// for example
+class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateFactor {
+    typealias StateType = UIControlState
+    
+    let state: StateType
+    
+    required init(state: UIControlState, predicate: @escaping (_ object: Control) -> Bool) {
+        self.state = state
+        
+        super.init(predicate: predicate)
+    }
+    
+    func mark(state: inout UIControlState) {
+        state.insert(self.state)
+    }
+}
+
+// deprecated
+
+struct QBoolStateFactor: Predicate {
+    typealias EvaluatedEntity = QUIckControl
     let property: String
     let state: UIControlState
     let inverted: Bool
     
-    func evaluate(_ object: QUIckControl) -> Bool {
+    func evaluate(with object: QUIckControl) -> Bool {
         let propertyValue = object.value(forKeyPath: property) as! Bool
         return Bool(propertyValue.hashValue ^ inverted.hashValue)
     }
 }
-

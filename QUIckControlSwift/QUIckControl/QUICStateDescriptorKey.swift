@@ -8,17 +8,8 @@
 
 import UIKit
 
-protocol QUIckControlTargetProtocol {
-    func setValue(_ value: Any?, forKeyPath keyPath: String)
-    func isEqual(_ object: Any?) -> Bool
-}
-
-extension NSObject: QUIckControlTargetProtocol {}
-
-protocol QUICStateDescriptor: Hashable {
+protocol QUICStateDescriptor: Hashable, StateDescriptor {
     var priority: Int { get }
-    var state: UIControlState { get }
-    func evaluate(_ controlState: UIControlState) -> Bool
 }
 
 enum QUICStateType : Int16 {
@@ -31,6 +22,9 @@ enum QUICStateType : Int16 {
 }
 
 struct QUICState: QUICStateDescriptor {
+    typealias StateType = UIControlState
+    typealias EvaluatedEntity = UIControlState
+    
     let priority: Int
     let state: UIControlState
     let type: QUICStateType
@@ -65,8 +59,8 @@ struct QUICState: QUICStateDescriptor {
         }
     }
     
-    func evaluate(_ controlState: UIControlState) -> Bool {
-        return predicate(controlState)
+    func evaluate(with entity: UIControlState) -> Bool {
+        return predicate(entity)
     }
     
     static public func ==(lhs: QUICState, rhs: QUICState) -> Bool {

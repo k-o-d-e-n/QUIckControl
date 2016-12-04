@@ -22,8 +22,14 @@ class QUIckControlValue {
     
     func value(for state: UIControlState) -> Any? {
         return values
-            .filter { return $0.key.evaluate(state) }
+            .filter { return $0.key.evaluate(with: state) }
             .max { $0.key.priority < $1.key.priority }?
             .value
+    }
+    
+    func removeValues(for state: UIControlState) {
+        while let index = values.index(where: { return $0.key.evaluate(with: state) }) {
+            values.remove(at: index)
+        }
     }
 }

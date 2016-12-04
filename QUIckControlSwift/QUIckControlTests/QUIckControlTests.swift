@@ -58,33 +58,36 @@ class QUIckControlTests: XCTestCase {
     
 }
 
-struct PrintState: StateUnit, StateApplier {
-    typealias EvaluatedObject = StatableObject
+struct PrintState: Predicate, StateApplier {
+    typealias EvaluatedEntity = StatableObject
     typealias ApplyObject = StatableObject
+    
     let value: () -> String
     let evaluateFunction: (_: StatableObject) -> Bool
     
-    func evaluate(_ object: StatableObject) -> Bool {
-        return evaluateFunction(object)
+    func evaluate(with entity: StatableObject) -> Bool {
+        return evaluateFunction(entity)
     }
     
-    func apply(_ object: StatableObject) {
-        object.printFunction = value
+    func apply(for target: StatableObject) {
+        target.printFunction = value
     }
 }
 
 class StatableObject: Statable {
-    typealias StateUnit = PrintState
+    typealias StateType = PrintState
+    typealias StateFactor = PrintState
+    
     var boolState: Bool = false { didSet { applyCurrentState() } }
     var printFunction: (() -> String)? = nil
-    var stateUnits = [PrintState]()
+    var factors = [PrintState]()
     var defaultState = PrintState(value: { return "default state" }, evaluateFunction: { object in object.boolState == false && object.printFunction == nil })
     var state: PrintState {
-        return stateUnits.first { $0.evaluate(self) } ?? defaultState
+        return factors.first { $0.evaluate(with: self) } ?? defaultState
     }
     
-    func apply(_ state: PrintState) {
-        state.apply(self)
+    func apply(state: PrintState) {
+        state.apply(for: self)
     }
 }
 
@@ -95,8 +98,8 @@ class StatableTests: XCTestCase {
         
         XCTAssertTrue(statable.printFunction?() == "default state")
         
-        statable.stateUnits.append(PrintState(value: { return "bool is true" }, evaluateFunction: { $0.boolState == true }))
-        statable.stateUnits.append(PrintState(value: { return "bool is false" }, evaluateFunction: { $0.boolState == false }))
+        statable.factors.append(PrintState(value: { return "bool is true" }, evaluateFunction: { $0.boolState == true }))
+        statable.factors.append(PrintState(value: { return "bool is false" }, evaluateFunction: { $0.boolState == false }))
         
         statable.boolState = true
         XCTAssertTrue(statable.printFunction?() == "bool is true")

@@ -12,7 +12,10 @@ public func instancetype<T>(object: Any?) -> T? {
     return object as? T
 }
 
-class QUIckControlValueTarget {
+class QUIckControlValueTarget: StatesApplier {
+    typealias ApplyObject = NSObject
+    typealias StateType = UIControlState
+    
     private var values = [String: QUIckControlValue]()
     private var defaults = [String: Any]()
     weak var target: NSObject!
@@ -43,19 +46,34 @@ class QUIckControlValueTarget {
         return keyValue
     }
     
-    func applyValues(for state: UIControlState) {
+    func apply(state: UIControlState, for target: NSObject) {
         for (key, value) in values {
             let keyValue = value.value(for: state)
             target.setValue(instancetype(object: keyValue ?? defaults[key]), forKeyPath: key)
         }
     }
     
+    func applyValues(for state: UIControlState) {
+        apply(state: state, for: target)
+    }
+    
     func applyValue(_ value: Any?, forKey key: String) {
         target.setValue(instancetype(object: value), forKeyPath: key)
     }
     
-    // intersected states not corrected working if two intersected states mathed in current state and contained values for same key.	
     func valueForKey(key: String, forState state: UIControlState) -> Any? {
         return values[key]?.value(for: state) ?? defaults[key]
+    }
+    
+    func removeValues() {
+        values.removeAll()
+    }
+    
+    func removeValues(for key: String) {
+        values.removeValue(forKey: key)
+    }
+    
+    func removeValues(for key: String, forState state: UIControlState) {
+        values[key]?.removeValues(for: state)
     }
 }

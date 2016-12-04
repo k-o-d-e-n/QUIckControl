@@ -88,7 +88,6 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     private var text = String()
     fileprivate var sublayers: [CAShapeLayer] { return (layer.sublayers as? [CAShapeLayer]) ?? [] }
     private var defaultPath: UIBezierPath!
-    @objc private var codeIsValid: Bool { return filled && valid }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -114,7 +113,18 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     func initializeInstance() {
         register(.filled, forBoolKeyPath: #keyPath(PinCodeControl.filled), inverted: false)
         register(.invalid, forBoolKeyPath: #keyPath(PinCodeControl.valid), inverted: true)
-        register(.valid, forBoolKeyPath: #keyPath(PinCodeControl.codeIsValid), inverted: false)
+//        register(.valid, with: NSPredicate(format: "\(#keyPath(PinCodeControl.valid)) == YES AND \(#keyPath(PinCodeControl.filled)) == YES"))
+        register(.valid, with: NSPredicate { control, _ in
+            let control = control as! PinCodeControl
+        
+            return control.filled && control.valid
+        })
+        // example use block factor
+//        register(.valid) { control in
+//            let control = control as! PinCodeControl
+//            
+//            return control.filled && control.valid
+//        }
     }
     
     override open func awakeFromNib() {
@@ -135,10 +145,9 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         
         setForDisabledState(filledItemColor!.withAlphaComponent(0.5), borderColor: UIColor.black.withAlphaComponent(0.3), borderWidth: nil)
         setForPlainState(nil, borderColor: UIColor.gray, borderWidth: 1)
-        setValue(UIColor.lightGray.withAlphaComponent(0.5).cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .highlighted)
+        setForHighlightedState(nil, borderColor: UIColor.lightGray.withAlphaComponent(0.5), borderWidth: nil)
         setForValidState(filledColor, borderColor: filledColor, borderWidth: nil)
         setForInvalidState(invalidColor, borderColor: invalidColor, borderWidth: nil)
-        applyCurrentState()
     }
     
     func loadSublayers() {
@@ -194,6 +203,12 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forInvertedState: .filled)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forInvertedState: .filled)
         setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forInvertedState: .filled)
+    }
+    
+    func setForHighlightedState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+        setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), forAllStatesContained: .highlighted)
+        setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), forAllStatesContained: .highlighted)
+        setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), forAllStatesContained: .highlighted)
     }
     
     func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {

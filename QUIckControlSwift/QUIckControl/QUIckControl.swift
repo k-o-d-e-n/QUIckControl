@@ -13,14 +13,17 @@ protocol QUIckControlActionTarget {
     func stop()
 }
 
-open class QUIckControl : UIControl, Statable {
-    typealias StateUnit = QUIckControlState
+open class QUIckControl : UIControl, KnownStatable {
+    typealias StateFactor = QUIckControlStateFactor<QUIckControl>
+    typealias StateType = UIControlState
+    
     var isTransitionTime = false
     lazy var thisValueTarget: QUIckControlValueTarget = QUIckControlValueTarget(target: self)
-    var stateUnits = [QUIckControlState]()
+    var factors = [StateFactor]()
     var targets = [QUIckControlValueTarget]()
     let scheduledActions = NSMutableSet()
     var actionTargets = [QUIckControlActionTarget]()
+    internal var comparedState: UIControlState = .normal
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -82,8 +85,24 @@ open class QUIckControl : UIControl, Statable {
     
     func register(_ state: UIControlState, forBoolKeyPath keyPath: String, inverted: Bool) {
         // & UIControlStateApplication ?
-        stateUnits.append(QUIckControlState(property: keyPath, state: state, inverted: inverted))
+//        factors.append(QBoolStateFactor(property: keyPath, state: state, inverted: inverted))
+        factors.append(QUIckControlStateFactor(state: state, predicate: NSPredicate(format: "\(keyPath) == \(inverted ? "NO" : "YES")")))
+        
+        // example use block factor
+//        let boolFactor = QBoolStateFactor(property: keyPath, state: state, inverted: inverted)
+//        factors.append(StateFactor(state: state, predicate: { (control) -> Bool in
+//            return boolFactor.evaluate(with: control)
+//        }))
     }
+    
+    func register(_ state: UIControlState, with predicate: NSPredicate) {
+        factors.append(QUIckControlStateFactor(state: state, predicate: predicate))
+    }
+    
+    // example use block factor
+//    func register(_ state: UIControlState, with factor: @escaping (_ object: QUIckControl) -> Bool) {
+//        factors.append(StateFactor(state: state, predicate: factor))
+//    }
     
     // MARK: - Actions
     
@@ -104,10 +123,18 @@ open class QUIckControl : UIControl, Statable {
     
     // MARK: - Values
     
-    // TODO: Create method for remove values for keyPath
+    func removeValues(forTarget target: NSObject, forKeyPath key: String, forState state: UIControlState) {
+        valueTarget(forTarget: target).removeValues(for: key, forState: state)
+    }
     
-    func removeValues(forTarget target: NSObject) {
-        let targetIndex = indexOfTarget(target)
+    func removeValues(forTarget target: NSObject, forKeyPath key: String) {
+        valueTarget(forTarget: target).removeValues(for: key)
+    }
+    
+    func removeValues(forTarget target: NSObject? = nil) {
+        guard let externalTarget = target else { thisValueTarget.removeValues(); return }
+        
+        let targetIndex = indexOfTarget(externalTarget)
         if targetIndex != nil {
             targets.remove(at: targetIndex!)
         }
@@ -132,7 +159,7 @@ open class QUIckControl : UIControl, Statable {
     func setValue(_ value: Any?, forTarget target: NSObject? = nil, forKeyPath key: String, for descriptor: QUICState) {
         let valTarget = valueTarget(forTarget: target ?? self)
         valTarget.setValue(value, forKeyPath: key, for: descriptor)
-        if descriptor.evaluate(state) {
+        if descriptor.evaluate(with: state) {
             valTarget.applyValue(value, forKey: key)
         }
     }
@@ -155,13 +182,22 @@ open class QUIckControl : UIControl, Statable {
     
     // MARK: - Apply state values
     
+    func applyCurrentState() {
+        guard !isTransitionTime else { return }
+        
+        let currentState = state
+        guard comparedState != currentState else { return }
+        
+        apply(state: currentState)
+        comparedState = currentState
+    }
+    
     func applyCurrentState(forTarget target: NSObject) {
         valueTarget(forTarget: target).applyValues(for: state)
     }
     
-    internal func apply(_ state: UIControlState) {
-        if isTransitionTime { return }
-        
+    // force apply state
+    internal func apply(state: UIControlState) {
         setNeedsDisplay()
         setNeedsLayout()
         thisValueTarget.applyValues(for: state)
@@ -174,18 +210,12 @@ open class QUIckControl : UIControl, Statable {
         return valueTarget(forTarget: target).valueForKey(key: key, forState: state)
     }
     
-    func applyCurrentState() {
-        apply(state)
-    }
-    
     override open var state: UIControlState {
-        var result: UInt = 0
-        for stateValue in stateUnits {
-            if stateValue.evaluate(self) {
-                result |= stateValue.state.rawValue
-            }
+        var result: UIControlState = .normal
+        for factor in factors {
+            factor.mark(state: &result, ifEvaluatedWith: self)
         }
-        return UIControlState(rawValue: result)
+        return result
     }
     
     deinit {
