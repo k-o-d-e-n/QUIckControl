@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Statable
 
 public func instancetype<T>(object: Any?) -> T? {
     return object as? T

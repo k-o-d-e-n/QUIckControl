@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Statable
 
 private extension Bool {
     init<T : Integer>(_ integer: T) {
@@ -14,23 +15,23 @@ private extension Bool {
     }
 }
 
-class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
-    typealias EvaluatedEntity = Control
-    typealias StateType = UIControlState
+public class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
+    public typealias EvaluatedEntity = Control
+    public typealias StateType = UIControlState
     
     let predicate: NSPredicate
     let state: UIControlState
     
-    required init(state: UIControlState, predicate: NSPredicate) {
+    required public init(state: UIControlState, predicate: NSPredicate) {
         self.state = state
         self.predicate = predicate
     }
     
-    func evaluate(with object: Control) -> Bool {
+    public func evaluate(with object: Control) -> Bool {
         return predicate.evaluate(with: object)
     }
     
-    func mark(state: inout UIControlState) {
+    public func mark(state: inout UIControlState) {
         state.formUnion(self.state)
     }
 }

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:QUIckControl.xcodeproj">
+      location = "self:QUIckControlExample.xcodeproj">
    </FileRef>
 </Workspace>

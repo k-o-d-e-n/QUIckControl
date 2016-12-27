@@ -7,39 +7,40 @@
 //
 
 import UIKit
+import Statable
 
-class QUICStateDescriptor: BlockPredicate<UIControlState>, Hashable, StateDescriptor {
-    typealias StateType = UIControlState
+public class QUICStateDescriptor: BlockPredicate<UIControlState>, Hashable, StateDescriptor {
+    public typealias StateType = UIControlState
     
-    let priority: Int
-    let state: UIControlState // is used only as identifier, may be deleted, because not used as required
-    var hashValue: Int { return Int(state.rawValue) * priority }
+    public let priority: Int
+    public let state: UIControlState // is used only as identifier, may be deleted, because not used as required
+    public var hashValue: Int { return Int(state.rawValue) * priority }
     
     override init(predicate: @escaping (_ object: UIControlState) -> Bool) {
         fatalError("This initializer not used")
     }
     
-    convenience init(usual: UIControlState, priority: Int = 1000) {
+    public convenience init(usual: UIControlState, priority: Int = 1000) {
         self.init(state: usual, priority: priority, predicate: { usual == $0 })
     }
     
-    convenience init(inverted: UIControlState, priority: Int = 750) {
+    public convenience init(inverted: UIControlState, priority: Int = 750) {
         self.init(state: inverted, priority: priority, predicate: { (inverted.rawValue & $0.rawValue) != inverted.rawValue })
     }
     
-    convenience init(intersected: UIControlState, priority: Int = 999) {
+    public convenience init(intersected: UIControlState, priority: Int = 999) {
         self.init(state: intersected, priority: priority, predicate: { (intersected.rawValue & $0.rawValue) == intersected.rawValue })
     }
     
-    convenience init(oneOfSeveral: UIControlState, priority: Int = 500) {
+    public convenience init(oneOfSeveral: UIControlState, priority: Int = 500) {
         self.init(state: oneOfSeveral, priority: priority, predicate: { (oneOfSeveral.rawValue & $0.rawValue) != 0 })
     }
     
-    convenience init(noneOfThis: UIControlState, priority: Int = 500) {
+    public convenience init(noneOfThis: UIControlState, priority: Int = 500) {
         self.init(state: noneOfThis, priority: priority, predicate: { (noneOfThis.rawValue & $0.rawValue) == 0 })
     }
     
-    init(state: UIControlState, priority: Int, predicate: @escaping (_ state: UIControlState) -> Bool) {
+    public init(state: UIControlState, priority: Int, predicate: @escaping (_ state: UIControlState) -> Bool) {
         self.priority = priority
         self.state = state
         super.init(predicate: predicate)

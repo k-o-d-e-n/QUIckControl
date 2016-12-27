@@ -2,6 +2,23 @@
 Base class for quick implementation UIControl subclass based on standard(enabled, highlighted, selected) and custom states.
 Implementation based on KVC.
 
+[![CI Status](http://img.shields.io/travis/Denis Koryttsev/QUIckControl.svg?style=flat)](https://travis-ci.org/Denis Koryttsev/QUIckControl)
+[![Version](https://img.shields.io/cocoapods/v/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)
+[![License](https://img.shields.io/cocoapods/l/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)
+[![Platform](https://img.shields.io/cocoapods/p/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)
+
+## Installation
+
+QUIckControl is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "QUIckControl"
+```
+```ruby
+pod "PinCodeControl"
+```
+
 <h2>Manage states:</h2>
 
 You may to bind value for specific target with state of types:
@@ -117,3 +134,11 @@ Objective C version is not supported.
 
 For quick research pattern this implementation, you may see project:
 https://github.com/k-o-d-e-n/Statable
+
+## Author
+
+Denis Koryttsev, koden.u8800@gmail.com
+
+## License
+
+QUIckControl is available under the MIT license. See the LICENSE file for more info.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0810"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A43E40F11DBD0B660009DBD9"
-               BuildableName = "QUIckControl.app"
-               BlueprintName = "QUIckControl"
-               ReferencedContainer = "container:QUIckControl.xcodeproj">
+               BlueprintIdentifier = "A48D45611E07340A003B4A7B"
+               BuildableName = "QUIckControlExample.app"
+               BlueprintName = "QUIckControlExample"
+               ReferencedContainer = "container:QUIckControlExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,20 +32,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A43E41051DBD0B660009DBD9"
-               BuildableName = "QUIckControlTests.xctest"
-               BlueprintName = "QUIckControlTests"
-               ReferencedContainer = "container:QUIckControl.xcodeproj">
+               BlueprintIdentifier = "A48D45751E07340A003B4A7B"
+               BuildableName = "QUIckControlExampleTests.xctest"
+               BlueprintName = "QUIckControlExampleTests"
+               ReferencedContainer = "container:QUIckControlExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A43E40F11DBD0B660009DBD9"
-            BuildableName = "QUIckControl.app"
-            BlueprintName = "QUIckControl"
-            ReferencedContainer = "container:QUIckControl.xcodeproj">
+            BlueprintIdentifier = "A48D45611E07340A003B4A7B"
+            BuildableName = "QUIckControlExample.app"
+            BlueprintName = "QUIckControlExample"
+            ReferencedContainer = "container:QUIckControlExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,10 +65,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A43E40F11DBD0B660009DBD9"
-            BuildableName = "QUIckControl.app"
-            BlueprintName = "QUIckControl"
-            ReferencedContainer = "container:QUIckControl.xcodeproj">
+            BlueprintIdentifier = "A48D45611E07340A003B4A7B"
+            BuildableName = "QUIckControlExample.app"
+            BlueprintName = "QUIckControlExample"
+            ReferencedContainer = "container:QUIckControlExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -84,10 +84,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A43E40F11DBD0B660009DBD9"
-            BuildableName = "QUIckControl.app"
-            BlueprintName = "QUIckControl"
-            ReferencedContainer = "container:QUIckControl.xcodeproj">
+            BlueprintIdentifier = "A48D45611E07340A003B4A7B"
+            BuildableName = "QUIckControlExample.app"
+            BlueprintName = "QUIckControlExample"
+            ReferencedContainer = "container:QUIckControlExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

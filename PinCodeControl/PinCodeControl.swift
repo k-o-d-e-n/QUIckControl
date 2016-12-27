@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QUIckControl
 
 extension UIControlEvents {
     public static var typeComplete = UIControlEvents(rawValue: 1 << 24)
@@ -104,13 +105,13 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         didLoadRequiredParameters()
     }
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         
         initializeInstance()
     }
     
-    func initializeInstance() {
+    private func initializeInstance() {
         register(.filled, forBoolKeyPath: #keyPath(PinCodeControl.filled), inverted: false)
         register(.invalid, forBoolKeyPath: #keyPath(PinCodeControl.valid), inverted: true)
 //        register(.valid, with: NSPredicate(format: "\(#keyPath(PinCodeControl.valid)) == YES AND \(#keyPath(PinCodeControl.filled)) == YES"))
@@ -177,7 +178,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         }
     }
     
-    func clear() {
+    open func clear() {
         deleteCharacters(in: 0..<text.characters.count)
         performTransition { _ in
             self.filled = false
@@ -187,35 +188,35 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     // MARK: - QUIckControl
     
-    func setForValidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+    open func setForValidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
         let validDescriptor = QUICStateDescriptor(intersected: .valid)
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: validDescriptor)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: validDescriptor)
         setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: validDescriptor)
     }
     
-    func setForInvalidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+    open func setForInvalidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
         let invalidDescriptor = QUICStateDescriptor(intersected: [.filled, .invalid])
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: invalidDescriptor)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: invalidDescriptor)
         setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: invalidDescriptor)
     }
     
-    func setForPlainState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+    open func setForPlainState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
         let plainDescriptor = QUICStateDescriptor(inverted: .filled)
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: plainDescriptor)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: plainDescriptor)
         setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: plainDescriptor)
     }
     
-    func setForHighlightedState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+    open func setForHighlightedState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
         let highlightedDescriptor = QUICStateDescriptor(intersected: .highlighted)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: highlightedDescriptor)
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: highlightedDescriptor)
         setValue(borderWidth, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.lineWidth), for: highlightedDescriptor)
     }
     
-    func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
+    open func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?) {
         let disableDescriptor = QUICStateDescriptor(intersected: .disabled, priority: 1000)
         setValue(fillColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.fillColor), for: disableDescriptor)
         setValue(borderColor?.cgColor, forTarget: applier, forKeyPath: #keyPath(CAShapeLayer.strokeColor), for: disableDescriptor)
@@ -265,7 +266,7 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
         }
     }
     
-    func deleteCharacters(in range: Range<Int>) {
+    private func deleteCharacters(in range: Range<Int>) {
         let start = text.index(text.startIndex, offsetBy: range.lowerBound)
         let end = text.index(text.startIndex, offsetBy: range.upperBound)
         text.removeSubrange(start..<end)
@@ -304,11 +305,11 @@ open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
     
     // MARK: - Validation
     
-    func validate(_ pin: String) -> Bool {
+    open func validate(_ pin: String) -> Bool {
         return (shouldUseDefaultValidation ? defaultValidation(pin) : true) && (validationBlock != nil ? validationBlock!(pin) : true)
     }
     
-    func defaultValidation(_ pin: String) -> Bool {
+    private func defaultValidation(_ pin: String) -> Bool {
         let result = pin.characters.reduce((true, true, true, 0)) { (result, character) -> (Bool, Bool, Bool, Int) in
             if result.3 == pin.characters.count - 1 { return result }
             
