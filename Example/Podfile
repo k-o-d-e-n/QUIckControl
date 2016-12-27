@@ -1,9 +1,7 @@
 use_frameworks!
 
 target 'QUIckControlExample' do
-  	pod 'QUIckControl'
-  	pod 'PinCodeControl'
-  	pod 'Statable'
+  	pod 'PinCodeControl' # loaded all depended pods (QUIckControl, Statable)
 end
 
 post_install do |installer|
