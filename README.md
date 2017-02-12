@@ -15,9 +15,6 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "QUIckControl"
 ```
-```ruby
-pod "PinCodeControl"
-```
 
 <h2>Manage states:</h2>
 
@@ -50,7 +47,7 @@ register(.valid, with: NSPredicate { control, _ in
 Immediately, after registration you may setup values for this state using:
 ```swift
 func setValue(_ value: Any?, forTarget: NSObject = default, forKeyPath: String, forInvertedState: UIControlState) {
-func setValue(_ value: Any?, forTarget: NSObject = default, forKeyPath: String, forAllStatesContained: UIControlState)  
+func setValue(_ value: Any?, forTarget: NSObject = default, forKeyPath: String, forAllStatesContained: UIControlState)
 func setValue(_ value: Any?, forTarget: NSObject = default, forKeyPath: String, for: UIControlState)
 func setValue(_ value: Any?, forTarget: NSObject = default, forKeyPath: String, for: QUICStateDescriptor)
 ```
@@ -97,6 +94,10 @@ control.subscribe(on: QUICStateDescriptor(intersected: .valid), { button.enabled
 
 QUIckControl subclass, which is used for input PIN code. It uses programming states for change visual view.
 
+```ruby
+pod "PinCodeControl"
+```
+
 Custom event and states:
 ```swift
 extension UIControlEvents {
@@ -107,26 +108,41 @@ extension UIControlState {
     public static var invalid = UIControlState(rawValue: 1 << 17)
     public static var valid = UIControlState(rawValue: (1 << 18) | filled.rawValue)
 }
+// preset state descriptors
+enum States {
+    static public let plain: QUICStateDescriptor
+    static public let valid: QUICStateDescriptor
+    static public let invalid: QUICStateDescriptor
+    static public let highlighted: QUICStateDescriptor
+    static public let disabled: QUICStateDescriptor
+}
 ```
 
 Main API
 ```swift
 var code: String { get } // entered code
-var filled: Bool { get set } // enabled, when all code entered
-var valid: Bool { get set } // disabled, when entered code invalid
-var validationBlock: ((_ code: String) -> Bool)? // custom validation
-var shouldUseDefaultValidation: Bool // when enabled, for validate used default implementation with implementation in validationBlock, if defined
+var filled: Bool { get } // enabled, when all code entered
+var valid: Bool { get } // disabled, when entered code invalid
+var validator: BlockPredicate<String>? // object for user validation pin code value
+var shouldUseDefaultValidation: Bool // if true, then code equal strings, such as '1111', '1234', '9876' will be defined as invalid values
 var filledItemColor: UIColor? // color for entered code element
 var itemPath: UIBezierPath? // bezier path for code element
-required init(codeLength: Int, sideSize: CGFloat, spaceSize: CGFloat) // main initializer
+
+init(parameters: Parameters, frame: CGRect? = default) // main initializer
 func clear() // clear all entered code
+
 // methods for set parameters for each state
-func setForValidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?)
-func setForInvalidState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?)
-func setForPlainState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?)
-func setForHighlightedState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?)
-func setForDisabledState(_ fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat?)
-func validate(_ pin: String) -> Bool // invoke validation process entered code
+func setFillColor(fillColor: UIColor?, for state: QUICStateDescriptor)
+func setBorderColor(borderColor: UIColor?, for state: QUICStateDescriptor)
+func setBorderWidth(borderWidth: CGFloat, for state: QUICStateDescriptor)
+func setForValidState(fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat)
+func setForInvalidState(fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat)
+func setForPlainState(fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat)
+func setForHighlightedState(fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat)
+func setForDisabledState(fillColor: UIColor?, borderColor: UIColor?, borderWidth: CGFloat)
+// validation
+func validate() -> Bool // perform validation current code value
+func validate(_ pin: String) -> Bool // method for validation entered pin code. Declared for subclasses override.
 ```
 
 <h2>Support information:</h2>

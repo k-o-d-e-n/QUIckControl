@@ -49,6 +49,7 @@ fileprivate class ValueApplier: NSObject {
 
 // TODO: Remove limit on input only numbers. Create enum with types of control for enter secure code. Create base class SecureCodeControl with private class PinCodeControl.
 @IBDesignable open class PinCodeControl: QUIckControl, UIKeyInput, UITextInputTraits {
+    /// preset states
     public enum States {
         public static let plain = QUICStateDescriptor(inverted: .filled)
         public static let valid = QUICStateDescriptor(intersected: .valid)
@@ -59,7 +60,6 @@ fileprivate class ValueApplier: NSObject {
     
     /// structure for initialize
     public struct Parameters {
-        static let def = Parameters(length: 4, spaceSize: 15, sideSize: 20)
         let length: Int
         let spaceSize: CGFloat
         let sideSize: CGFloat
