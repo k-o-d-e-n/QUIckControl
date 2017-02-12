@@ -9,6 +9,7 @@
 import UIKit
 import PinCodeControl
 import QUIckControl
+import Statable
 
 struct PinCodeElementsGroup {
     weak var control: PinCodeControl!
@@ -60,11 +61,12 @@ class ViewController: UIViewController {
         oldGroup.addDependencyFor(group: newGroup)
         newGroup.addDependencyFor(group: repeatGroup)
         repeatGroup.addDependencyFor(button: applyButton)
-        
         applyButton.addTarget(self, action: #selector(touchUpInside(sender:)), for: .touchUpInside)
         
+//        newPinCodeControl.itemPath = UIBezierPath(rect: CGRect(origin: .zero, size: CGSize(width: 35, height: 35)))
+//        oldPinCodeControl.itemPath = UIBezierPath(roundedRect: CGRect(origin: .zero, size: CGSize(width: 20, height: 20)), byRoundingCorners: [.bottomLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10))
         newPinCodeControl.subscribe(on: .typeComplete) { print($0) }.start()
-        repeatGroup.control.validationBlock = { (code: String) -> Bool in return code == self.newGroup.control.code }
+        repeatGroup.control.validator = BlockPredicate<String>() { $0 == self.newGroup.control.code }
 
         oldGroup.control.setValue("Old PIN-code is invalid",
                                   forTarget: self,

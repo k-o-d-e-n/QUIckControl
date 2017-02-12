@@ -80,10 +80,11 @@ open class QUIckControl : UIControl, KnownStatable {
         
         isTransitionTime = false
         applyCurrentState()
-        for action: Any in scheduledActions {
+        let actions = scheduledActions
+        scheduledActions.removeAllObjects()
+        for action: Any in actions {
             sendActions(for: action as! UIControlEvents)
         }
-        scheduledActions.removeAllObjects()
     }
     
     public func performTransition(withCommit commit: Bool = true, transition: () -> Void) {
