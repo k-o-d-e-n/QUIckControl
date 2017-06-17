@@ -151,6 +151,10 @@ Objective C version is not supported.
 For quick research pattern this implementation, you may see project:
 https://github.com/k-o-d-e-n/Statable
 
+## Contributing
+
+[Read here](https://github.com/k-o-d-e-n/QUIckControl/blob/master/CONTRIBUTING.md)
+
 ## Author
 
 Denis Koryttsev, koden.u8800@gmail.com
