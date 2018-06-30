@@ -78,6 +78,17 @@ class ViewController: UIViewController {
                                   for: QUICStateDescriptor(state: [.filled, .invalid], priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
         
         newGroup.control.subscribe(on: QUICStateDescriptor(usual: .valid), { print("New pin code is valid") })
+        
+        oldGroup.control.setAction({ (target) in
+            let button = (target as! ViewController).applyButton!
+            let title = button.currentTitle
+            button.setTitle("FAIL", for: .disabled)
+            button.setTitleColor(.red, for: .disabled)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1), execute: { 
+                button.setTitle(title, for: .disabled)
+                button.setTitleColor(nil, for: .disabled)
+            })
+        }, for: self, for: QUICStateDescriptor(intersected: .invalid))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

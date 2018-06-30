@@ -10,7 +10,7 @@ import UIKit
 
 class QUIckControlActionTargetImp: NSObject, QUIckControlActionTarget {
     
-    weak var parentControl: QUIckControl!
+    weak var parentControl: QUIckControl?
     var events: UIControlEvents!
     var action: ((_ control: QUIckControl) -> ())?
     
@@ -22,15 +22,15 @@ class QUIckControlActionTargetImp: NSObject, QUIckControlActionTarget {
     }
     
     func actionSelector(_ control: QUIckControl) {
-        action?(parentControl)
+        action?(control)
     }
     
     func start() {
-        self.parentControl.addTarget(self, action: #selector(self.actionSelector), for: self.events)
+        self.parentControl?.addTarget(self, action: #selector(self.actionSelector), for: self.events)
     }
     
     func stop() {
-        self.parentControl.removeTarget(self, action: #selector(self.actionSelector), for: self.events)
+        self.parentControl?.removeTarget(self, action: #selector(self.actionSelector), for: self.events)
     }
     
 }
