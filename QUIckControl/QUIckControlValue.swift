@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QUIckControlValue {
+final class QUIckControlValue {
     let key: String
     private var values = [QUICStateDescriptor: Any]()
     

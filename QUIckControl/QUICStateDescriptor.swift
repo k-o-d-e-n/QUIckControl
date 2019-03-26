@@ -9,7 +9,7 @@
 import UIKit
 import Statable
 
-public class QUICStateDescriptor: BlockPredicate<UIControlState>, Hashable, StateDescriptor {
+public final class QUICStateDescriptor: BlockPredicate<UIControlState>, Hashable, StateDescriptor {
     public typealias StateType = UIControlState
     
     public let priority: Int

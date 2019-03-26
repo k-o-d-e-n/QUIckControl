@@ -13,7 +13,7 @@ public func instancetype<T>(object: Any?) -> T? {
     return object as? T
 }
 
-class QUIckControlValueTarget: StatesApplier {
+final class QUIckControlValueTarget: StatesApplier {
     typealias ApplyObject = NSObject
     typealias StateType = UIControlState
     

@@ -10,12 +10,12 @@ import UIKit
 import Statable
 
 private extension Bool {
-    init<T : Integer>(_ integer: T) {
+    init<T : BinaryInteger>(_ integer: T) {
         self.init(integer != 0)
     }
 }
 
-public class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
+public final class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
     public typealias EvaluatedEntity = Control
     public typealias StateType = UIControlState
     
@@ -36,7 +36,7 @@ public class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFac
     }
 }
 
-class QUIckControlSubscriber: StateSubscriber {
+final class QUIckControlSubscriber: StateSubscriber {
     typealias EvaluatedEntity = UIControlState
     
     let action: () -> ()
@@ -57,7 +57,7 @@ class QUIckControlSubscriber: StateSubscriber {
 }
 
 // for example using BlockPredicate
-class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateFactor {
+final class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateFactor {
     typealias StateType = UIControlState
     
     let state: StateType
