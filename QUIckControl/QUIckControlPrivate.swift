@@ -17,12 +17,12 @@ private extension Bool {
 
 public final class QUIckControlStateFactor<Control: QUIckControl>: Predicate, StateFactor {
     public typealias EvaluatedEntity = Control
-    public typealias StateType = UIControlState
+    public typealias StateType = UIControl.State
     
     let predicate: NSPredicate
-    let state: UIControlState
+    let state: UIControl.State
     
-    required public init(state: UIControlState, predicate: NSPredicate) {
+    required public init(state: UIControl.State, predicate: NSPredicate) {
         self.state = state
         self.predicate = predicate
     }
@@ -31,13 +31,13 @@ public final class QUIckControlStateFactor<Control: QUIckControl>: Predicate, St
         return predicate.evaluate(with: object)
     }
     
-    public func mark(state: inout UIControlState) {
+    public func mark(state: inout UIControl.State) {
         state.formUnion(self.state)
     }
 }
 
 final class QUIckControlSubscriber: StateSubscriber {
-    typealias EvaluatedEntity = UIControlState
+    typealias EvaluatedEntity = UIControl.State
     
     let action: () -> ()
     let descriptor: QUICStateDescriptor
@@ -51,24 +51,24 @@ final class QUIckControlSubscriber: StateSubscriber {
         action()
     }
     
-    func evaluate(with entity: UIControlState) -> Bool {
+    func evaluate(with entity: UIControl.State) -> Bool {
         return descriptor.evaluate(with: entity)
     }
 }
 
 // for example using BlockPredicate
 final class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, StateFactor {
-    typealias StateType = UIControlState
+    typealias StateType = UIControl.State
     
     let state: StateType
     
-    required init(state: UIControlState, predicate: @escaping (_ object: Control) -> Bool) {
+    required init(state: UIControl.State, predicate: @escaping (_ object: Control) -> Bool) {
         self.state = state
         
         super.init(predicate: predicate)
     }
     
-    func mark(state: inout UIControlState) {
+    func mark(state: inout UIControl.State) {
         state.formUnion(self.state)
     }
 }
@@ -78,7 +78,7 @@ final class QUIckControlFactor<Control: QUIckControl>: BlockPredicate<Control>, 
 struct QBoolStateFactor: Predicate {
     typealias EvaluatedEntity = QUIckControl
     let property: String
-    let state: UIControlState
+    let state: UIControl.State
     let inverted: Bool
     
     func evaluate(with object: QUIckControl) -> Bool {

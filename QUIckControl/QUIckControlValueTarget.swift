@@ -11,7 +11,7 @@ import Statable
 
 final class QUIckControlValueTarget: StatesApplier {
     typealias ApplyObject = NSObject
-    typealias StateType = UIControlState
+    typealias StateType = UIControl.State
     
     private var values = [String: QUIckControlValue]()
     private var defaults = [String: Any]()
@@ -43,14 +43,14 @@ final class QUIckControlValueTarget: StatesApplier {
         return keyValue
     }
     
-    func apply(state: UIControlState, for target: NSObject) {
+    func apply(state: UIControl.State, for target: NSObject) {
         for (key, value) in values {
             let keyValue = value.value(for: state)
             target.setValue(keyValue ?? defaults[key], forKeyPath: key)
         }
     }
     
-    func apply(state: UIControlState) {
+    func apply(state: UIControl.State) {
         apply(state: state, for: target)
     }
     
@@ -58,7 +58,7 @@ final class QUIckControlValueTarget: StatesApplier {
         target.setValue(value, forKeyPath: key)
     }
     
-    func valueForKey(key: String, forState state: UIControlState) -> Any? {
+    func valueForKey(key: String, forState state: UIControl.State) -> Any? {
         return values[key]?.value(for: state) ?? defaults[key]
     }
     
@@ -70,7 +70,7 @@ final class QUIckControlValueTarget: StatesApplier {
         values.removeValue(forKey: key)
     }
     
-    func removeValues(for key: String, forState state: UIControlState) {
+    func removeValues(for key: String, forState state: UIControl.State) {
         values[key]?.removeValues(for: state)
     }
 }

@@ -21,14 +21,14 @@ final class QUIckControlValue {
         values[descriptor] = value
     }
     
-    func value(for state: UIControlState) -> Any? {
+    func value(for state: UIControl.State) -> Any? {
         return values
             .filter { return $0.key.evaluate(with: state) }
             .max { $0.key.priority < $1.key.priority }?
             .value
     }
     
-    func removeValues(for state: UIControlState) {
+    func removeValues(for state: UIControl.State) {
         while let index = values.index(where: { return $0.key.evaluate(with: state) }) {
             values.remove(at: index)
         }
