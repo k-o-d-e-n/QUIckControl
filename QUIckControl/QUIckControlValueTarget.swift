@@ -9,10 +9,6 @@
 import UIKit
 import Statable
 
-public func instancetype<T>(object: Any?) -> T? {
-    return object as? T
-}
-
 final class QUIckControlValueTarget: StatesApplier {
     typealias ApplyObject = NSObject
     typealias StateType = UIControlState
@@ -50,7 +46,7 @@ final class QUIckControlValueTarget: StatesApplier {
     func apply(state: UIControlState, for target: NSObject) {
         for (key, value) in values {
             let keyValue = value.value(for: state)
-            target.setValue(instancetype(object: keyValue ?? defaults[key]), forKeyPath: key)
+            target.setValue(keyValue ?? defaults[key], forKeyPath: key)
         }
     }
     
@@ -59,7 +55,7 @@ final class QUIckControlValueTarget: StatesApplier {
     }
     
     func applyValue(_ value: Any?, forKey key: String) {
-        target.setValue(instancetype(object: value), forKeyPath: key)
+        target.setValue(value, forKeyPath: key)
     }
     
     func valueForKey(key: String, forState state: UIControlState) -> Any? {

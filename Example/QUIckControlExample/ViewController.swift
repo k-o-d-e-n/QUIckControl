@@ -51,7 +51,7 @@ class ViewController: UIViewController {
     lazy var newGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.newPinCodeControl, label: self.newPinCodeLabel)
     lazy var repeatGroup: PinCodeElementsGroup = PinCodeElementsGroup(control: self.repeatPinCodeControl, label: self.repeatPinCodeLabel)
     
-    var stateLogger: String = "" { didSet { print("Received string: " + stateLogger) } }
+    @objc var stateLogger: String = "" { didSet { print("Received string: " + stateLogger) } }
     var stateIsEnabled: Bool = false { didSet { print("State is " + String(stateIsEnabled)) } }
     var printFunction: () -> () = { print("default state") }
     
@@ -71,13 +71,13 @@ class ViewController: UIViewController {
         oldGroup.control.setValue("Old PIN-code is invalid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICStateDescriptor(state: .invalid, priority: 1000, predicate: { $0.contains(.invalid) }))
+                                  for: .init(state: .invalid, priority: 1000, predicate: { $0.contains(.invalid) }))
         oldGroup.control.setValue("Old PIN-code is valid",
                                   forTarget: self,
                                   forKeyPath: #keyPath(ViewController.stateLogger),
-                                  for: QUICStateDescriptor(state: [.filled, .invalid], priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
+                                  for: .init(state: [.filled, .invalid], priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
         
-        newGroup.control.subscribe(on: QUICStateDescriptor(usual: .valid), { print("New pin code is valid") })
+        newGroup.control.subscribe(on: .init(usual: .valid), { print("New pin code is valid") })
         
         oldGroup.control.setAction({ (target) in
             let button = (target as! ViewController).applyButton!
@@ -88,14 +88,14 @@ class ViewController: UIViewController {
                 button.setTitle(title, for: .disabled)
                 button.setTitleColor(nil, for: .disabled)
             })
-        }, for: self, for: QUICStateDescriptor(intersected: .invalid))
+        }, for: self, for: .init(intersected: .invalid))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(false)
     }
     
-    func touchUpInside(sender: UIButton) {
+    @objc func touchUpInside(sender: UIButton) {
         print("PIN-code '" + newGroup.control.code + "' saved")
         oldGroup.control.clear()
         newGroup.control.clear()
