@@ -16,7 +16,7 @@ public protocol QUIckControlActionTarget {
 
 open class QUIckControl : UIControl, KnownStatable {
     public typealias Factor = QUIckControlStateFactor<QUIckControl>
-    public typealias StateType = UIControlState
+    public typealias StateType = UIControl.State
     
     public var isTransitionTime = false
     private lazy var thisValueTarget: QUIckControlValueTarget = QUIckControlValueTarget(target: self)
@@ -26,7 +26,7 @@ open class QUIckControl : UIControl, KnownStatable {
     private let scheduledActions = NSMutableSet()
     private var actionTargets = [QUIckControlActionTarget]()
     private lazy var subscribers: [QUIckControlSubscriber] = [QUIckControlSubscriber]()
-    public var lastAppliedState: UIControlState = .normal {
+    public var lastAppliedState: UIControl.State = .normal {
         didSet {
             for subscriber in subscribers {
                 subscriber.invoke(ifMatched: lastAppliedState)
@@ -83,7 +83,7 @@ open class QUIckControl : UIControl, KnownStatable {
         let actions = scheduledActions
         scheduledActions.removeAllObjects()
         for action: Any in actions {
-            sendActions(for: action as! UIControlEvents)
+            sendActions(for: action as! UIControl.Event)
         }
     }
     
@@ -93,7 +93,7 @@ open class QUIckControl : UIControl, KnownStatable {
         commit ? commitTransition() : endTransition()
     }
     
-    public func register(_ state: UIControlState, forBoolKeyPath keyPath: String, inverted: Bool) {
+    public func register(_ state: UIControl.State, forBoolKeyPath keyPath: String, inverted: Bool) {
         // & UIControlStateApplication ?
 //        factors.append(QBoolStateFactor(property: keyPath, state: state, inverted: inverted))
         factors.append(QUIckControlStateFactor(state: state, predicate: NSPredicate(format: "\(keyPath) == \(inverted ? "NO" : "YES")")))
@@ -105,7 +105,7 @@ open class QUIckControl : UIControl, KnownStatable {
 //        }))
     }
     
-    public func register(_ state: UIControlState, with predicate: NSPredicate) {
+    public func register(_ state: UIControl.State, with predicate: NSPredicate) {
         factors.append(QUIckControlStateFactor(state: state, predicate: predicate))
     }
     
@@ -116,14 +116,14 @@ open class QUIckControl : UIControl, KnownStatable {
     
     // MARK: - Actions
     
-    open func subscribe(on events: UIControlEvents, _ action: @escaping (QUIckControl) -> Void) -> QUIckControlActionTarget {
+    open func subscribe(on events: UIControl.Event, _ action: @escaping (QUIckControl) -> Void) -> QUIckControlActionTarget {
         let actionTarget = QUIckControlActionTargetImp(control: self, controlEvents: events)
         actionTarget.action = action
         actionTargets.append(actionTarget)
         return actionTarget
     }
     
-    override open func sendActions(for controlEvents: UIControlEvents) {
+    override open func sendActions(for controlEvents: UIControl.Event) {
         if isTransitionTime {
             scheduledActions.add(controlEvents)
             return
@@ -137,7 +137,7 @@ open class QUIckControl : UIControl, KnownStatable {
     
     // MARK: - Values
     
-    public func removeValues(forTarget target: NSObject, forKeyPath key: String, forState state: UIControlState) {
+    public func removeValues(forTarget target: NSObject, forKeyPath key: String, forState state: UIControl.State) {
         valueTarget(forTarget: target).removeValues(for: key, forState: state)
     }
     
@@ -154,19 +154,19 @@ open class QUIckControl : UIControl, KnownStatable {
         }
     }
     
-    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forInvertedState state: UIControlState) {
+    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forInvertedState state: UIControl.State) {
         setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(inverted: state))
     }
     
-    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forAllStatesContained state: UIControlState) {
+    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, forAllStatesContained state: UIControl.State) {
         setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(intersected: state))
     }
     
-    public func setValue(_ value: Any?, forKeyPath key: String, for state: UIControlState) {
+    public func setValue(_ value: Any?, forKeyPath key: String, for state: UIControl.State) {
         setValue(value, forTarget: self, forKeyPath: key, for: state)
     }
     
-    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for state: UIControlState) {
+    public func setValue(_ value: Any?, forTarget target: NSObject, forKeyPath key: String, for state: UIControl.State) {
         setValue(value, forTarget: target, forKeyPath: key, for: QUICStateDescriptor(usual: state))
     }
     
@@ -211,7 +211,7 @@ open class QUIckControl : UIControl, KnownStatable {
     }
     
     // force apply state
-    open func apply(state: UIControlState) {
+    open func apply(state: UIControl.State) {
         setNeedsDisplay()
         setNeedsLayout()
         thisValueTarget.apply(state: state)
@@ -220,12 +220,12 @@ open class QUIckControl : UIControl, KnownStatable {
         }
     }
     
-    public func value(for target: NSObject, forKey key: String, for state: UIControlState) -> Any? {
+    public func value(for target: NSObject, forKey key: String, for state: UIControl.State) -> Any? {
         return valueTarget(forTarget: target).valueForKey(key: key, forState: state)
     }
     
-    override open var state: UIControlState {
-        var result: UIControlState = .normal
+    override open var state: UIControl.State {
+        var result: UIControl.State = .normal
         for factor in factors {
             factor.mark(state: &result, ifEvaluatedWith: self)
         }

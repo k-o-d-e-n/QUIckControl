@@ -10,10 +10,10 @@ import UIKit
 
 final class QUIckControlActionTargetImp: NSObject, QUIckControlActionTarget {
     weak var parentControl: QUIckControl?
-    var events: UIControlEvents!
+    var events: UIControl.Event!
     var action: ((_ control: QUIckControl) -> ())?
     
-    init(control: QUIckControl, controlEvents events: UIControlEvents) {
+    init(control: QUIckControl, controlEvents events: UIControl.Event) {
         super.init()
         
         self.events = events
