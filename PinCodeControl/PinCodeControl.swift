@@ -10,14 +10,14 @@ import UIKit
 import Statable
 import QUIckControl
 
-extension UIControlEvents {
-    public static var typeComplete = UIControlEvents(rawValue: 1 << 24)
+extension UIControl.Event {
+    public static var typeComplete = UIControl.Event(rawValue: 1 << 24)
 }
 
-extension UIControlState {
-    public static var filled = UIControlState(rawValue: 1 << 16)
-    public static var invalid = UIControlState(rawValue: 1 << 17)
-    public static let valid = UIControlState(rawValue: (1 << 18) | filled.rawValue)
+extension UIControl.State {
+    public static var filled = UIControl.State(rawValue: 1 << 16)
+    public static var invalid = UIControl.State(rawValue: 1 << 17)
+    public static let valid = UIControl.State(rawValue: (1 << 18) | filled.rawValue)
 }
 
 fileprivate class ValueApplier: NSObject {
@@ -32,12 +32,12 @@ fileprivate class ValueApplier: NSObject {
     override func setValue(_ value: Any?, forKey key: String) {
         if control.sublayers.count == 0 { return }
         
-        if !key.isEqual(#keyPath(CAShapeLayer.fillColor)) || control.codeLength == control.code.characters.count {
+        if !key.isEqual(#keyPath(CAShapeLayer.fillColor)) || control.codeLength == control.code.count {
             control.sublayers.forEach { $0.setValue(value, forKey: key) }
             return
         }
         for i in 0..<control.codeLength {
-            let value = i < control.code.characters.count ? (control.filledItemColor?.cgColor as Any?) : value
+            let value = i < control.code.count ? (control.filledItemColor?.cgColor as Any?) : value
             control.sublayers[i].setValue(value, forKey: key)
         }
     }
@@ -90,7 +90,7 @@ fileprivate class ValueApplier: NSObject {
     }
     
     /// filled state, yes when code type ended.
-    open private(set) var filled = false {
+    @objc open private(set) var filled = false {
         didSet {
             if oldValue != filled {
                 applyCurrentState()
@@ -100,7 +100,7 @@ fileprivate class ValueApplier: NSObject {
     }
     
     /// valid state, yes if entered code is valid.
-    open private(set) var valid = true {
+    @objc open private(set) var valid = true {
         didSet { if oldValue != valid { applyCurrentState() } }
     }
     
@@ -111,7 +111,7 @@ fileprivate class ValueApplier: NSObject {
     open var shouldUseDefaultValidation = true
     
     /// color for filled code item
-    open dynamic var filledItemColor: UIColor?
+    @objc open dynamic var filledItemColor: UIColor?
     
     /// bezier path for code item
     open var itemPath: UIBezierPath?
@@ -171,8 +171,8 @@ fileprivate class ValueApplier: NSObject {
     }
     
     private func loadSublayers() {
-        let strokeColor = value(for: applier, forKey: #keyPath(CAShapeLayer.strokeColor), for: lastAppliedState)
-        let fillColor = value(for: applier, forKey: #keyPath(CAShapeLayer.fillColor), for: lastAppliedState)
+//        let strokeColor = value(for: applier, forKey: #keyPath(CAShapeLayer.strokeColor), for: lastAppliedState)
+//        let fillColor = value(for: applier, forKey: #keyPath(CAShapeLayer.fillColor), for: lastAppliedState)
         
         for _ in 0..<codeLength {
             let sublayer = CAShapeLayer()
@@ -212,8 +212,8 @@ fileprivate class ValueApplier: NSObject {
     
     /// clear entered code
     open func clear() {
-        deleteCharacters(in: 0..<text.characters.count)
-        performTransition { _ in
+        deleteCharacters(in: 0..<text.count)
+        performTransition {
             self.filled = false
             self.valid = true
         }
@@ -295,16 +295,16 @@ fileprivate class ValueApplier: NSObject {
     
     // MARK: - UIKeyInput
     
-    public var hasText: Bool { return text.characters.count > 0 }
+    public var hasText: Bool { return text.count > 0 }
     
     public func deleteBackward() {
         if hasText {
-            if text.characters.count == codeLength {
+            if text.count == codeLength {
                 beginTransition()
                 filled = false
                 valid = true
             }
-            deleteCharacters(in: text.characters.count-1..<text.characters.count)
+            deleteCharacters(in: text.count-1..<text.count)
             commitTransition()
         }
     }
@@ -314,16 +314,16 @@ fileprivate class ValueApplier: NSObject {
         let end = text.index(text.startIndex, offsetBy: range.upperBound)
         text.removeSubrange(start..<end)
         
-        let val = value(for: applier, forKey: #keyPath(CAShapeLayer.fillColor), for: state)
-        sublayers[range].forEach { $0.fillColor = instancetype(object: val) }
+        let val = value(for: applier, forKey: #keyPath(CAShapeLayer.fillColor), for: state) as! CGColor?
+        sublayers[range].forEach { $0.fillColor = val }
     }
     
     public func insertText(_ txt: String) {
-        if text.characters.count < codeLength {
-            sublayers[text.characters.count].fillColor = filledItemColor?.cgColor
+        if text.count < codeLength {
+            sublayers[text.count].fillColor = filledItemColor?.cgColor
             text += txt
-            if text.characters.count == codeLength {
-                performTransition { _ in
+            if text.count == codeLength {
+                performTransition {
                     self.filled = true
                     self.valid = self.validate()
                 }
@@ -362,8 +362,8 @@ fileprivate class ValueApplier: NSObject {
     }
     
     private let defaultValidator = BlockPredicate<String> { (pin) -> Bool in
-        let result = pin.characters.reduce((true, true, true, 0)) { (result, character) -> (Bool, Bool, Bool, Int) in
-            if result.3 == pin.characters.count - 1 { return result }
+        let result = pin.reduce((true, true, true, 0)) { (result, character) -> (Bool, Bool, Bool, Int) in
+            if result.3 == pin.count - 1 { return result }
             
             let number: Int = Int(String(character))!
             let next: Int = Int(String(pin[pin.index(pin.startIndex, offsetBy: result.3 + 1)]))!
@@ -375,14 +375,8 @@ fileprivate class ValueApplier: NSObject {
 
 /// Methods for configure appearance
 // TODO: Create appearance configurator class.
-fileprivate extension PinCodeControl {
+extension PinCodeControl {
     static var isDisabledAppearance: Bool = true
-    
-    override open class func initialize() {
-        if self == PinCodeControl.self && !isDisabledAppearance {
-            PinCodeControl.appearance().loadAppearance()
-        }
-    }
     
     fileprivate func loadAppearance() {
         filledItemColor = UIColor.gray
@@ -399,35 +393,35 @@ fileprivate extension PinCodeControl {
         setBorderColorForInvalidState(borderColor: invalidColor)
     }
     
-    fileprivate dynamic func setFillColorForDisabledState(fillColor: UIColor?) {
+    @objc fileprivate dynamic func setFillColorForDisabledState(fillColor: UIColor?) {
         setFillColor(fillColor: fillColor, for: States.disabled)
     }
     
-    fileprivate dynamic func setFillColorForValidState(fillColor: UIColor?) {
+    @objc fileprivate dynamic func setFillColorForValidState(fillColor: UIColor?) {
         setFillColor(fillColor: fillColor, for: States.valid)
     }
     
-    fileprivate dynamic func setFillColorForInvalidState(fillColor: UIColor?) {
+    @objc fileprivate dynamic func setFillColorForInvalidState(fillColor: UIColor?) {
         setFillColor(fillColor: fillColor, for: States.invalid)
     }
     
-    fileprivate dynamic func setBorderColorForDisabledState(borderColor: UIColor?) {
+    @objc fileprivate dynamic func setBorderColorForDisabledState(borderColor: UIColor?) {
         setBorderColor(borderColor: borderColor, for: States.disabled)
     }
     
-    fileprivate dynamic func setBorderColorForPlainState(borderColor: UIColor?) {
+    @objc fileprivate dynamic func setBorderColorForPlainState(borderColor: UIColor?) {
         setBorderColor(borderColor: borderColor, for: States.plain)
     }
     
-    fileprivate dynamic func setBorderColorForHighlightedState(borderColor: UIColor?) {
+    @objc fileprivate dynamic func setBorderColorForHighlightedState(borderColor: UIColor?) {
         setBorderColor(borderColor: borderColor, for: States.highlighted)
     }
     
-    fileprivate dynamic func setBorderColorForValidState(borderColor: UIColor?) {
+    @objc fileprivate dynamic func setBorderColorForValidState(borderColor: UIColor?) {
         setBorderColor(borderColor: borderColor, for: States.valid)
     }
     
-    fileprivate dynamic func setBorderColorForInvalidState(borderColor: UIColor?) {
+    @objc fileprivate dynamic func setBorderColorForInvalidState(borderColor: UIColor?) {
         setBorderColor(borderColor: borderColor, for: States.invalid)
     }
 }

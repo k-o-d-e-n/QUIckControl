@@ -179,7 +179,7 @@ open class QUIckControl : UIControl, KnownStatable {
     }
     
     private func indexOfTarget(_ target: NSObject) -> Int? {
-        return targets.index(where: { return $0.target.isEqual(target) })
+        return targets.firstIndex(where: { return $0.target.isEqual(target) })
     }
     
     private func valueTarget(forTarget target: NSObject!) -> QUIckControlValueTarget {

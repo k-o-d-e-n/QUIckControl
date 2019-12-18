@@ -14,8 +14,11 @@ public final class QUICStateDescriptor: BlockPredicate<UIControl.State>, Hashabl
     
     public let priority: Int
     public let state: UIControl.State // is used only as identifier, may be deleted, because not used as required
-    public var hashValue: Int { return Int(state.rawValue) * priority }
-    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(state.rawValue)
+        hasher.combine(priority)
+    }
+
     override init(predicate: @escaping (_ object: UIControl.State) -> Bool) {
         fatalError("This initializer not used")
     }

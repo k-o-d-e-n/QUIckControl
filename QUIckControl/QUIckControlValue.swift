@@ -29,7 +29,7 @@ final class QUIckControlValue {
     }
     
     func removeValues(for state: UIControl.State) {
-        while let index = values.index(where: { return $0.key.evaluate(with: state) }) {
+        while let index = values.firstIndex(where: { return $0.key.evaluate(with: state) }) {
             values.remove(at: index)
         }
     }

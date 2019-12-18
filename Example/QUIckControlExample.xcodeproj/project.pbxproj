@@ -8,12 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2E6A8B57998FDFF4743470E9 /* Pods_QUIckControlExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162930C17046EA4700861203 /* Pods_QUIckControlExample.framework */; };
-		A44AD81A1FC889680005494A /* QUIckControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8141FC889680005494A /* QUIckControl.swift */; };
-		A44AD81B1FC889680005494A /* QUIckControlActionTargetImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8151FC889680005494A /* QUIckControlActionTargetImp.swift */; };
-		A44AD81C1FC889680005494A /* QUIckControlPrivate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8161FC889680005494A /* QUIckControlPrivate.swift */; };
-		A44AD81D1FC889680005494A /* QUIckControlValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8171FC889680005494A /* QUIckControlValue.swift */; };
-		A44AD81E1FC889680005494A /* QUIckControlValueTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8181FC889680005494A /* QUIckControlValueTarget.swift */; };
-		A44AD81F1FC889680005494A /* QUICStateDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44AD8191FC889680005494A /* QUICStateDescriptor.swift */; };
 		A48D45661E07340A003B4A7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48D45651E07340A003B4A7B /* AppDelegate.swift */; };
 		A48D45681E07340A003B4A7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48D45671E07340A003B4A7B /* ViewController.swift */; };
 		A48D456B1E07340A003B4A7B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A48D45691E07340A003B4A7B /* Main.storyboard */; };
@@ -36,12 +30,6 @@
 		162930C17046EA4700861203 /* Pods_QUIckControlExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QUIckControlExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DEE73C62D9157B14522F84 /* Pods-QUIckControlExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QUIckControlExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample.debug.xcconfig"; sourceTree = "<group>"; };
 		9E1DEEC8E20B4644E39E1091 /* Pods-QUIckControlExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QUIckControlExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample.release.xcconfig"; sourceTree = "<group>"; };
-		A44AD8141FC889680005494A /* QUIckControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUIckControl.swift; path = ../QUIckControl/QUIckControl.swift; sourceTree = "<group>"; };
-		A44AD8151FC889680005494A /* QUIckControlActionTargetImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUIckControlActionTargetImp.swift; path = ../QUIckControl/QUIckControlActionTargetImp.swift; sourceTree = "<group>"; };
-		A44AD8161FC889680005494A /* QUIckControlPrivate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUIckControlPrivate.swift; path = ../QUIckControl/QUIckControlPrivate.swift; sourceTree = "<group>"; };
-		A44AD8171FC889680005494A /* QUIckControlValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUIckControlValue.swift; path = ../QUIckControl/QUIckControlValue.swift; sourceTree = "<group>"; };
-		A44AD8181FC889680005494A /* QUIckControlValueTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUIckControlValueTarget.swift; path = ../QUIckControl/QUIckControlValueTarget.swift; sourceTree = "<group>"; };
-		A44AD8191FC889680005494A /* QUICStateDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QUICStateDescriptor.swift; path = ../QUIckControl/QUICStateDescriptor.swift; sourceTree = "<group>"; };
 		A48D45621E07340A003B4A7B /* QUIckControlExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QUIckControlExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48D45651E07340A003B4A7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A48D45671E07340A003B4A7B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,31 +70,9 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		A44AD8061FC8890A0005494A /* Development */ = {
-			isa = PBXGroup;
-			children = (
-				A44AD8071FC889340005494A /* QUIckControl */,
-			);
-			name = Development;
-			sourceTree = "<group>";
-		};
-		A44AD8071FC889340005494A /* QUIckControl */ = {
-			isa = PBXGroup;
-			children = (
-				A44AD8141FC889680005494A /* QUIckControl.swift */,
-				A44AD8151FC889680005494A /* QUIckControlActionTargetImp.swift */,
-				A44AD8161FC889680005494A /* QUIckControlPrivate.swift */,
-				A44AD8171FC889680005494A /* QUIckControlValue.swift */,
-				A44AD8181FC889680005494A /* QUIckControlValueTarget.swift */,
-				A44AD8191FC889680005494A /* QUICStateDescriptor.swift */,
-			);
-			name = QUIckControl;
-			sourceTree = "<group>";
-		};
 		A48D45591E07340A003B4A7B = {
 			isa = PBXGroup;
 			children = (
-				A44AD8061FC8890A0005494A /* Development */,
 				A48D45641E07340A003B4A7B /* QUIckControlExample */,
 				A48D45791E07340A003B4A7B /* QUIckControlExampleTests */,
 				A48D45631E07340A003B4A7B /* Products */,
@@ -265,7 +231,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PinCodeControl/PinCodeControl.framework",
 				"${BUILT_PRODUCTS_DIR}/QUIckControl/QUIckControl.framework",
 				"${BUILT_PRODUCTS_DIR}/Statable/Statable.framework",
@@ -278,7 +244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD2567B6EDEE6935E01DE35D /* [CP] Check Pods Manifest.lock */ = {
@@ -307,13 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A48D45681E07340A003B4A7B /* ViewController.swift in Sources */,
-				A44AD81D1FC889680005494A /* QUIckControlValue.swift in Sources */,
-				A44AD81A1FC889680005494A /* QUIckControl.swift in Sources */,
 				A48D45661E07340A003B4A7B /* AppDelegate.swift in Sources */,
-				A44AD81C1FC889680005494A /* QUIckControlPrivate.swift in Sources */,
-				A44AD81B1FC889680005494A /* QUIckControlActionTargetImp.swift in Sources */,
-				A44AD81F1FC889680005494A /* QUICStateDescriptor.swift in Sources */,
-				A44AD81E1FC889680005494A /* QUIckControlValueTarget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

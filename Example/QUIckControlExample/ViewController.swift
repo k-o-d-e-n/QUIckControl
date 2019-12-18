@@ -78,9 +78,10 @@ class ViewController: UIViewController {
                                   for: .init(state: [.filled, .invalid], priority: 1000, predicate: { $0.contains(.filled) && !$0.contains(.invalid) }))
         
         newGroup.control.subscribe(on: .init(usual: .valid), { print("New pin code is valid") })
-        
-        oldGroup.control.setAction({ (target) in
-            let button = (target as! ViewController).applyButton!
+
+        let target = self
+        oldGroup.control.subscribe(on: .init(intersected: .invalid), { [unowned target] in
+            let button = target.applyButton!
             let title = button.currentTitle
             button.setTitle("FAIL", for: .disabled)
             button.setTitleColor(.red, for: .disabled)
@@ -88,7 +89,7 @@ class ViewController: UIViewController {
                 button.setTitle(title, for: .disabled)
                 button.setTitleColor(nil, for: .disabled)
             })
-        }, for: self, for: .init(intersected: .invalid))
+        })
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
