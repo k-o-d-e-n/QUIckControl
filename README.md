@@ -2,7 +2,6 @@
 Base class for quick implementation UIControl subclass based on standard(enabled, highlighted, selected) and custom states.
 Implementation based on KVC.
 
-[![CI Status](http://img.shields.io/travis/Denis Koryttsev/QUIckControl.svg?style=flat)](https://travis-ci.org/Denis Koryttsev/QUIckControl)
 [![Version](https://img.shields.io/cocoapods/v/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)
 [![License](https://img.shields.io/cocoapods/l/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)
 [![Platform](https://img.shields.io/cocoapods/p/QUIckControl.svg?style=flat)](http://cocoapods.org/pods/QUIckControl)

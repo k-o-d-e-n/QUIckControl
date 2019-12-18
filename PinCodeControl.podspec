@@ -29,6 +29,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
 
   s.source_files = 'PinCodeControl/**/*'
+  s.swift_versions = '4.2', '5.0', '5.1'
   
   # s.resource_bundles = {
   #   'QUIckControl' => ['QUIckControl/Assets/*.png']

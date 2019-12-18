@@ -30,6 +30,7 @@
 		162930C17046EA4700861203 /* Pods_QUIckControlExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QUIckControlExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DEE73C62D9157B14522F84 /* Pods-QUIckControlExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QUIckControlExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample.debug.xcconfig"; sourceTree = "<group>"; };
 		9E1DEEC8E20B4644E39E1091 /* Pods-QUIckControlExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QUIckControlExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-QUIckControlExample/Pods-QUIckControlExample.release.xcconfig"; sourceTree = "<group>"; };
+		A43186D623AA241600438915 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		A48D45621E07340A003B4A7B /* QUIckControlExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QUIckControlExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48D45651E07340A003B4A7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A48D45671E07340A003B4A7B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		A48D45591E07340A003B4A7B = {
 			isa = PBXGroup;
 			children = (
+				A43186D623AA241600438915 /* README.md */,
 				A48D45641E07340A003B4A7B /* QUIckControlExample */,
 				A48D45791E07340A003B4A7B /* QUIckControlExampleTests */,
 				A48D45631E07340A003B4A7B /* Products */,
@@ -418,7 +420,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -432,7 +434,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -445,7 +447,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QUIckControlExample.app/QUIckControlExample";
 			};
 			name = Debug;
@@ -459,7 +461,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = koden.QUIckControlExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QUIckControlExample.app/QUIckControlExample";
 			};
 			name = Release;
